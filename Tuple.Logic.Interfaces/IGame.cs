@@ -21,7 +21,7 @@ namespace Tuple.Logic.Interfaces
         /// <param name="secondCardCol">Column of the second card</param>
         /// <param name="thirdCardRow">Row of the third card</param>
         /// <param name="thirdCardCol">Column of the third card</param>
-        /// <returns>true iff the provided set is a legal set</returns>
+        /// <returns>true if the provided set is a legal set</returns>
         bool RemoveSet(int firstCardRow, int firstCardCol, int secondCardRow, int secondCardCol, int thirdCardRow, int thirdCardCol);
 
         /// <summary>
