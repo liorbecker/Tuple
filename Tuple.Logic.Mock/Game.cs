@@ -14,7 +14,7 @@ namespace Tuple.Logic.Mock
         private IDeck deck;
         private ICard[,] board;
 
-        private const Object boardLocker = new Object();
+        private readonly Object boardLocker = new Object();
 
         public Game()
         {
