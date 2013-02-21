@@ -1,10 +1,10 @@
-﻿
+﻿using System;
 namespace Tuple.Logic.Interfaces
 {
     public interface IDeck
     {
-        public ICard GetNextCard();
+        ICard GetNextCard();
 
-        public bool IsEmpty();
+        bool IsEmpty();
     }
 }

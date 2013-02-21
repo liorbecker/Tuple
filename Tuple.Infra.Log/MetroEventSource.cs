@@ -1,11 +1,9 @@
 ﻿
-using System;
 using System.Diagnostics.Tracing;
-using System.IO;
 
 namespace Tuple.Infra.Log
 {
-    public  sealed class MetroEventSource : EventSource
+    public sealed class MetroEventSource : EventSource
     {
         public static MetroEventSource Log = new MetroEventSource();
 

@@ -3,22 +3,22 @@ namespace Tuple.Logic.Interfaces
 {
     public interface ICard
     {
-        public Symbol Symbol
+        Symbol Symbol
         {
             get;
         }
 
-        public Color Color
+        Color Color
         {
             get;
         }
 
-        public Number Number
+        Number Number
         {
             get;
         }
 
-        public Shading Shading
+        Shading Shading
         {
             get;
         }

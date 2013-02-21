@@ -6,11 +6,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{1214B032-DC3E-484B-9E84-7F21742FCF5C}</ProjectGuid>
+    <ProjectGuid>{634D1545-E4C3-48B5-A9E7-60E70512579A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Tuple.Logic.Interfaces</RootNamespace>
-    <AssemblyName>Tuple.Logic.Interfaces</AssemblyName>
+    <RootNamespace>A</RootNamespace>
+    <AssemblyName>A</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -99,14 +99,11 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Color.cs" />
-    <Compile Include="IGame.cs" />
-    <Compile Include="ICard.cs" />
-    <Compile Include="IDeck.cs" />
-    <Compile Include="Number.cs" />
+    <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Shading.cs" />
-    <Compile Include="Symbol.cs" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '11.0' ">
     <VisualStudioVersion>11.0</VisualStudioVersion>
