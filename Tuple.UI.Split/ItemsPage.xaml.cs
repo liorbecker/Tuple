@@ -57,8 +57,10 @@ namespace Tuple.UI.Split
             Position position;
             ICard card = null;
 
-            do
+
+            while (game.ShouldOpenCard())
             {
+
                 card = game.OpenCard(out position);
 
                 if (card != null)
@@ -66,7 +68,9 @@ namespace Tuple.UI.Split
                     //add to deck
                 }
 
-            } while (card != null);
+            }
+
+          
 
 
         }
