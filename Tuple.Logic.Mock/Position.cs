@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Tuple.Logic.Interfaces;
 
-namespace Tuple.Logic.Interfaces
+namespace Tuple.Logic.Mock
 {
-    public class Position
+    public class Position : IPosition
     {
         public ushort Row { get; set; }
         public ushort Col { get; set; }

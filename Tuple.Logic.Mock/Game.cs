@@ -38,27 +38,27 @@ namespace Tuple.Logic.Mock
             }
         }
 
-        public bool RemoveSet(Position firstCardPosition, Position secondCardPosition, Position thirdCardPosition)
+        public bool RemoveSet(ICardWithPosition firstCard, ICardWithPosition secondCard, ICardWithPosition thirdCard)
         {
             lock (boardLocker)
             {
                 if (!Util.isLegalSet(
-                    board[firstCardPosition],
-                    board[secondCardPosition],
-                    board[thirdCardPosition]))
+                    board[firstCard.Position],
+                    board[secondCard.Position],
+                    board[thirdCard.Position]))
                 {
                     MetroEventSource.Log.Warn(String.Format("GAME: Trying to remove ilegal set {0}, {1}, {2}",
-                        board[firstCardPosition],
-                        board[secondCardPosition],
-                        board[thirdCardPosition]));
+                        board[firstCard.Position],
+                        board[secondCard.Position],
+                        board[thirdCard.Position]));
 
                     return false;
                 }
                 else
                 {
-                    board[firstCardPosition] = null;
-                    board[secondCardPosition] = null;
-                    board[thirdCardPosition] = null;
+                    board[firstCard.Position] = null;
+                    board[secondCard.Position] = null;
+                    board[thirdCard.Position] = null;
 
                     return true;
 	            }
@@ -73,16 +73,16 @@ namespace Tuple.Logic.Mock
             }
         }
 
-        public ICard OpenCard(out Position position)
+        public ICardWithPosition OpenCard()
         {
             lock (boardLocker)
             {
-                position = FindOpenSpace();
+                Position position = FindOpenSpace();
+                ICard newCard = deck.GetNextCard();
 
-                var newCard = deck.GetNextCard();
                 board[position] = newCard;
 
-                return board[position];
+                return new CardWithPosition(newCard, position);
             }
         }
 

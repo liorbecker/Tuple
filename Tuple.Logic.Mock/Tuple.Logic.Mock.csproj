@@ -116,8 +116,10 @@
   <ItemGroup>
     <Compile Include="Board.cs" />
     <Compile Include="Card.cs" />
+    <Compile Include="CardWithPosition.cs" />
     <Compile Include="Deck.cs" />
     <Compile Include="Game.cs" />
+    <Compile Include="Position.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '11.0' ">
