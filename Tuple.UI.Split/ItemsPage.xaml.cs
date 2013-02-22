@@ -54,12 +54,12 @@ namespace Tuple.UI.Split
             this.DefaultViewModel["Items"] = sampleDataGroups;
 
 
-            int row, col;
+            Position position;
             ICard card = null;
 
             do
             {
-                card = game.OpenCard(out row, out col);
+                card = game.OpenCard(out position);
 
                 if (card != null)
                 {
@@ -89,16 +89,16 @@ namespace Tuple.UI.Split
             item.Subtitle = "Click ";
 
 
-            if (game.RemoveSet(0, 0, 0, 1, 0, 2))
+            if (game.RemoveSet(new Position(0, 0), new Position(0, 1), new Position(0, 2)))
             {
                 //Remove cards
 
-                int row, col;
+                Position position;
                 ICard card = null;
 
                 do
                 {
-                    card = game.OpenCard(out row, out col);
+                    card = game.OpenCard(out position);
 
                     if (card != null)
                     {

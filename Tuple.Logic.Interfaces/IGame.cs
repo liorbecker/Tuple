@@ -15,21 +15,17 @@ namespace Tuple.Logic.Interfaces
         /// <summary>
         /// Remove a set from the board
         /// </summary>
-        /// <param name="firstCardRow">Row of the first card</param>
-        /// <param name="firstCardCol">Column of the first card</param>
-        /// <param name="secondCardRow">Row of the second card</param>
-        /// <param name="secondCardCol">Column of the second card</param>
-        /// <param name="thirdCardRow">Row of the third card</param>
-        /// <param name="thirdCardCol">Column of the third card</param>
+        /// <param name="firstCardPosition">Position of the first card in the set to check</param>
+        /// <param name="secondCardPosition">Position of the second card in the set to check</param>
+        /// <param name="thirdCardPosition">Position of the third card in the set to check</param>
         /// <returns>true if the provided set is a legal set</returns>
-        bool RemoveSet(int firstCardRow, int firstCardCol, int secondCardRow, int secondCardCol, int thirdCardRow, int thirdCardCol);
+        bool RemoveSet(Position firstCardPosition, Position secondCardPosition, Position thirdCardPosition);
 
         /// <summary>
         /// Opens the next card from the deck
         /// </summary>
-        /// <param name="row">The row to place the new card</param>
-        /// <param name="col">The column to place the new card</param>
+        /// <param name="position">The position to place the new card</param>
         /// <returns>The card to place on the board, or null if there is no need to open one</returns>
-        ICard OpenCard(out int row, out int col);
+        ICard OpenCard(out Position position);
     }
 }

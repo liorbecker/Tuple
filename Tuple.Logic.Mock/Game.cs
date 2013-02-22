@@ -8,11 +8,11 @@ namespace Tuple.Logic.Mock
 {
     public class Game : IGame
     {
-        private const int rows = 6;
-        public const int cols = 3;
+        private const ushort rows = 6;
+        public const ushort cols = 3;
 
         private IDeck deck;
-        private ICard[,] board;
+        private Board board;
 
         private readonly Object boardLocker = new Object();
 
@@ -20,7 +20,7 @@ namespace Tuple.Logic.Mock
         {
             deck = new Deck();
 
-            board = new Card[rows, cols];
+            board = new Board(rows, cols);
         }
 
         public bool IsGameOver()
@@ -38,43 +38,51 @@ namespace Tuple.Logic.Mock
             }
         }
 
-        public bool RemoveSet(int firstCardRow, int firstCardCol, int secondCardRow, int secondCardCol, int thirdCardRow, int thirdCardCol)
+        public bool RemoveSet(Position firstCardPosition, Position secondCardPosition, Position thirdCardPosition)
         {
             lock (boardLocker)
             {
-                if (!Util.isLegalSet(board[firstCardRow, firstCardCol], board[secondCardRow, secondCardCol], board[thirdCardRow, thirdCardCol]))
+                if (!Util.isLegalSet(
+                    board[firstCardPosition],
+                    board[secondCardPosition],
+                    board[thirdCardPosition]))
                 {
                     MetroEventSource.Log.Warn(String.Format("GAME: Trying to remove ilegal set {0}, {1}, {2}",
-                        board[firstCardRow, firstCardCol], board[secondCardRow, secondCardCol], board[thirdCardRow, thirdCardCol]));
+                        board[firstCardPosition],
+                        board[secondCardPosition],
+                        board[thirdCardPosition]));
 
                     return false;
                 }
                 else
                 {
-                    board[firstCardRow, firstCardCol] = null;
-                    board[secondCardRow, secondCardCol] = null;
-                    board[thirdCardRow, thirdCardCol] = null;
+                    board[firstCardPosition] = null;
+                    board[secondCardPosition] = null;
+                    board[thirdCardPosition] = null;
 
                     return true;
 	            }
             }
         }
 
-        public ICard OpenCard(out int row, out int col)
+        public ICard OpenCard(out Position position)
         {
             lock (boardLocker)
             {
                 if (deck.IsEmpty() || Util.isThereSet(GetAllOpenedCards()))
                 {
-                    row = -1;
-                    col = -1;
+                    position = new Position(99, 99);
 
                     return null;
                 }
                 else
                 {
-                    FindOpenSpace(out row, out col);
-                    return board[row,col];
+                    position = FindOpenSpace();
+
+                    var newCard = deck.GetNextCard();
+                    board[position] = newCard;
+
+                    return board[position];
                 }
             }
         }
@@ -83,9 +91,9 @@ namespace Tuple.Logic.Mock
         {
             IList<ICard> cards = new List<ICard>();
 
-            for (int i = 0; i < rows; i++)
+            for (ushort i = 0; i < rows; i++)
             {
-                for (int j = 0; j < cols; j++)
+                for (ushort j = 0; j < cols; j++)
                 {
                     if (board[i, j] != null)
                     {
@@ -97,17 +105,15 @@ namespace Tuple.Logic.Mock
             return cards;
         }
 
-        private void FindOpenSpace(out int row, out int col)
+        private Position FindOpenSpace()
         {
-            for (int i = 0; i < rows; i++)
+            for (ushort i = 0; i < rows; i++)
             {
-                for (int j = 0; j < cols; j++)
+                for (ushort j = 0; j < cols; j++)
                 {
                     if (board[i, j] == null)
                     {
-                        row = i;
-                        col = j;
-                        return;
+                        return new Position(i, j);
                     }
                 }
             }
