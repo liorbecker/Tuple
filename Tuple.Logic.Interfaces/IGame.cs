@@ -22,10 +22,16 @@ namespace Tuple.Logic.Interfaces
         bool RemoveSet(Position firstCardPosition, Position secondCardPosition, Position thirdCardPosition);
 
         /// <summary>
+        /// Indicates if the current board need to call <see cref="OpenCard"/>
+        /// </summary>
+        /// <returns>true if you need to call <see cref="OpenCard"/></returns>
+        bool ShouldOpenCard();
+
+        /// <summary>
         /// Opens the next card from the deck
         /// </summary>
         /// <param name="position">The position to place the new card</param>
-        /// <returns>The card to place on the board, or null if there is no need to open one</returns>
+        /// <returns>The card to place on the board</returns>
         ICard OpenCard(out Position position);
     }
 }

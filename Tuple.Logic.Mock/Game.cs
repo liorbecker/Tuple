@@ -65,26 +65,43 @@ namespace Tuple.Logic.Mock
             }
         }
 
+        public bool ShouldOpenCard()
+        {
+            lock (boardLocker)
+            {
+                return !deck.IsEmpty() && (CountAllOpenedCards() < 12 || !Util.isThereSet(GetAllOpenedCards()));
+            }
+        }
+
         public ICard OpenCard(out Position position)
         {
             lock (boardLocker)
             {
-                if (deck.IsEmpty() || Util.isThereSet(GetAllOpenedCards()))
+                position = FindOpenSpace();
+
+                var newCard = deck.GetNextCard();
+                board[position] = newCard;
+
+                return board[position];
+            }
+        }
+
+        private ushort CountAllOpenedCards()
+        {
+            ushort count = 0;
+
+            for (ushort i = 0; i < rows; i++)
+            {
+                for (ushort j = 0; j < cols; j++)
                 {
-                    position = new Position(99, 99);
-
-                    return null;
-                }
-                else
-                {
-                    position = FindOpenSpace();
-
-                    var newCard = deck.GetNextCard();
-                    board[position] = newCard;
-
-                    return board[position];
+                    if (board[i, j] != null)
+                    {
+                        count++;
+                    }
                 }
             }
+
+            return count;
         }
 
         private IEnumerable<ICard> GetAllOpenedCards()
@@ -118,8 +135,8 @@ namespace Tuple.Logic.Mock
                 }
             }
 
-            MetroEventSource.Log.Critical("GAME: wrong logic, should also find a free space sine the board is large enough (if it's full, there must be a set so this method shouldn't be called.");
-            throw new Exception("GAME: wrong logic, should also find a free space sine the board is large enough (if it's full, there must be a set so this method shouldn't be called.");
+            MetroEventSource.Log.Critical("GAME: wrong logic, should always find a free space sine the board is large enough (if it's full, there must be a set so this method shouldn't be called.");
+            throw new Exception("GAME: wrong logic, should always find a free space sine the board is large enough (if it's full, there must be a set so this method shouldn't be called.");
         }
     }
 }
