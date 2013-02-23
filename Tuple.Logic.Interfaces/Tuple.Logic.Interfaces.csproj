@@ -99,11 +99,12 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ICardWithPosition.cs" />
     <Compile Include="Color.cs" />
     <Compile Include="IGame.cs" />
     <Compile Include="ICard.cs" />
     <Compile Include="IDeck.cs" />
-    <Compile Include="Position.cs" />
+    <Compile Include="IPosition.cs" />
     <Compile Include="Number.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Shading.cs" />

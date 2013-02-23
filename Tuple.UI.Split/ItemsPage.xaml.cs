@@ -53,13 +53,11 @@ namespace Tuple.UI.Split
             var sampleDataGroups = SampleDataSource.GetGroups((String)navigationParameter);
             this.DefaultViewModel["Items"] = sampleDataGroups;
 
-
-            Position position;
-            ICard card = null;
+            ICardWithPosition cardWithPosition;
 
             do
             {
-                card = game.OpenCard(out position);
+                cardWithPosition = game.OpenCard();
 
                 if (card != null)
                 {
@@ -93,12 +91,11 @@ namespace Tuple.UI.Split
             {
                 //Remove cards
 
-                Position position;
-                ICard card = null;
+                ICardWithPosition cardWithPosition;
 
                 do
                 {
-                    card = game.OpenCard(out position);
+                    cardWithPosition = game.OpenCard();
 
                     if (card != null)
                     {

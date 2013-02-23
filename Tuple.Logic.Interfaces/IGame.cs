@@ -15,11 +15,11 @@ namespace Tuple.Logic.Interfaces
         /// <summary>
         /// Remove a set from the board
         /// </summary>
-        /// <param name="firstCardPosition">Position of the first card in the set to check</param>
-        /// <param name="secondCardPosition">Position of the second card in the set to check</param>
-        /// <param name="thirdCardPosition">Position of the third card in the set to check</param>
+        /// <param name="firstCard">The first card in the set to check</param>
+        /// <param name="secondCard">The second card in the set to check</param>
+        /// <param name="thirdCard">The third card in the set to check</param>
         /// <returns>true if the provided set is a legal set</returns>
-        bool RemoveSet(Position firstCardPosition, Position secondCardPosition, Position thirdCardPosition);
+        bool RemoveSet(ICardWithPosition firstCard, ICardWithPosition secondCard, ICardWithPosition thirdCard);
 
         /// <summary>
         /// Indicates if the current board need to call <see cref="OpenCard"/>
@@ -30,8 +30,7 @@ namespace Tuple.Logic.Interfaces
         /// <summary>
         /// Opens the next card from the deck
         /// </summary>
-        /// <param name="position">The position to place the new card</param>
         /// <returns>The card to place on the board</returns>
-        ICard OpenCard(out Position position);
+        ICardWithPosition OpenCard();
     }
 }

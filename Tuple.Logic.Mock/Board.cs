@@ -11,7 +11,7 @@ namespace Tuple.Logic.Mock
             board = new Card[maxRow, maxCol];
         }
 
-        public ICard this[Position position]
+        public ICard this[IPosition position]
         {
             get
             {
