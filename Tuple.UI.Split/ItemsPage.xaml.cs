@@ -55,16 +55,16 @@ namespace Tuple.UI.Split
 
             ICardWithPosition cardWithPosition;
 
-            do
-            {
-                cardWithPosition = game.OpenCard();
+            //do
+            //{
+            //    cardWithPosition = game.OpenCard();
 
-                if (card != null)
-                {
-                    //add to deck
-                }
+            //    if (card != null)
+            //    {
+            //        //add to deck
+            //    }
 
-            } while (card != null);
+            //} while (card != null);
 
 
         }
@@ -87,25 +87,25 @@ namespace Tuple.UI.Split
             item.Subtitle = "Click ";
 
 
-            if (game.RemoveSet(new Position(0, 0), new Position(0, 1), new Position(0, 2)))
-            {
-                //Remove cards
+            //if (game.RemoveSet(new Position(0, 0), new Position(0, 1), new Position(0, 2)))
+            //{
+            //    //Remove cards
 
-                ICardWithPosition cardWithPosition;
+            //    ICardWithPosition cardWithPosition;
 
-                do
-                {
-                    cardWithPosition = game.OpenCard();
+            //    do
+            //    {
+            //        cardWithPosition = game.OpenCard();
 
-                    if (card != null)
-                    {
-                        //add to deck
-                    }
+            //        if (card != null)
+            //        {
+            //            //add to deck
+            //        }
 
-                } while (card != null);
+            //    } while (card != null);
 
 
-            }
+            //}
             game.IsGameOver();
             
 
