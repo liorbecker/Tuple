@@ -12,8 +12,8 @@ namespace Tuple.Logic.Mock
 
         public Deck()
         {
-            cards = new Stack<ICard>(81);
             
+            HashSet<ICard> cardsSet = new HashSet<ICard>();
             foreach (var symbol in (Symbol[])Enum.GetValues(typeof(Symbol)))
             {
                 foreach (var color in (Color[])Enum.GetValues(typeof(Color)))
@@ -22,13 +22,18 @@ namespace Tuple.Logic.Mock
                     {
                         foreach (var shading in (Shading[])Enum.GetValues(typeof(Shading)))
                         {
-                            cards.Push(new Card(symbol, color, number, shading));
+                            cardsSet.Add(new Card(symbol, color, number, shading));
                         }
                     }
                 }
             }
+            var shuffeledCards = cardsSet.OrderBy(c => Guid.NewGuid());
 
-            cards.OrderBy(c => Guid.NewGuid());
+            cards = new Stack<ICard>(81);
+            foreach (var item in shuffeledCards)
+            {
+                cards.Push(item);
+            }
         }
 
         public ICard GetNextCard()

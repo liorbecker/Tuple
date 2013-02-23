@@ -86,6 +86,47 @@ namespace Tuple.Logic.Mock
             }
         }
 
+        public IEnumerable<ICardWithPosition> GetAllOpenedCards()
+        {
+            IList<ICardWithPosition> cards = new List<ICardWithPosition>();
+
+            for (ushort i = 0; i < rows; i++)
+            {
+                for (ushort j = 0; j < cols; j++)
+                {
+                    if (board[i, j] != null)
+                    {
+                        cards.Add(new CardWithPosition(board[i, j], new Position(i, j)));
+                    }
+                }
+            }
+
+            return cards;
+        }
+
+        public override string ToString()
+        {
+            String boardString = String.Empty;
+            for (ushort i = 0; i < rows; i++)
+            {
+                for (ushort j = 0; j < cols; j++)
+                {
+                    if (board[i, j] != null)
+                    {
+                        boardString += board[i, j].ToString().PadRight(31) + " ";
+                    }
+                }
+                boardString += Environment.NewLine;
+            }
+
+            return
+                new String('-', 95) + Environment.NewLine +
+                "- Deck empty: " + deck.IsEmpty() + " - Has set: " + Util.isThereSet(GetAllOpenedCards()) + Environment.NewLine +
+                new String('-', 95) + Environment.NewLine +
+                boardString +
+                new String('-', 95) + Environment.NewLine;
+        }
+
         private ushort CountAllOpenedCards()
         {
             ushort count = 0;
@@ -102,24 +143,6 @@ namespace Tuple.Logic.Mock
             }
 
             return count;
-        }
-
-        private IEnumerable<ICard> GetAllOpenedCards()
-        {
-            IList<ICard> cards = new List<ICard>();
-
-            for (ushort i = 0; i < rows; i++)
-            {
-                for (ushort j = 0; j < cols; j++)
-                {
-                    if (board[i, j] != null)
-                    {
-                        cards.Add(board[i, j]);
-                    }
-                }
-            }
-
-            return cards;
         }
 
         private Position FindOpenSpace()

@@ -13,5 +13,10 @@ namespace Tuple.Logic.Mock
             Card = card;
             Position = position;
         }
+
+        public override string ToString()
+        {
+            return string.Format("{0}@{1}", Card.ToString(), Position.ToString());
+        }
     }
 }

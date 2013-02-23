@@ -59,6 +59,7 @@ namespace Tuple.UI.Split
             //{
             //    cardWithPosition = game.OpenCard();
 
+
             //    if (card != null)
             //    {
             //        //add to deck
@@ -86,6 +87,7 @@ namespace Tuple.UI.Split
 
 
             ////if (game.RemoveSet(new Position(0, 0), new Position(0, 1), new Position(0, 2)))
+
             //{
             //    //Remove cards
 

@@ -19,9 +19,9 @@ namespace Tuple.Logic.Common
                 (firstCard.Shading == secondCard.Shading && firstCard.Shading == thirdCard.Shading));
         }
 
-        public static bool isThereSet(IEnumerable<ICard> cards)
+        public static bool isThereSet(IEnumerable<ICardWithPosition> cards)
         {
-            var cs = cards.ToArray();
+            var cs = cards.Select(c => c.Card).ToArray();
             var count = cs.Count();
 
             for (int i = 0; i < count; i++)
