@@ -1,4 +1,5 @@
 ﻿
+using System.Collections.Generic;
 namespace Tuple.Logic.Interfaces
 {
     /// <summary>
@@ -32,5 +33,11 @@ namespace Tuple.Logic.Interfaces
         /// </summary>
         /// <returns>The card to place on the board</returns>
         ICardWithPosition OpenCard();
+
+        /// <summary>
+        /// Get all the opened cards on the board
+        /// </summary>
+        /// <returns>A collection with all the opened cards on the board</returns>
+        IEnumerable<ICardWithPosition> GetAllOpenedCards(); 
     }
 }

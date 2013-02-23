@@ -1,4 +1,5 @@
-﻿using Tuple.Logic.Interfaces;
+﻿using System;
+using Tuple.Logic.Interfaces;
 
 namespace Tuple.Logic.Mock
 {
@@ -11,6 +12,11 @@ namespace Tuple.Logic.Mock
         {
             Row = row;
             Col = col;
+        }
+
+        public override string ToString()
+        {
+            return String.Format("[{0},{1}]", Row, Col); ;
         }
     }
 }
