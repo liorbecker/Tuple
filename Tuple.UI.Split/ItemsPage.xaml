@@ -37,14 +37,25 @@
             AutomationProperties.AutomationId="ItemsGridView"
             AutomationProperties.Name="Items"
             TabIndex="1"
-            Grid.RowSpan="2"
+            Grid.RowSpan="3"
             Padding="116,136,116,46"
-            ItemsSource="{Binding Source={StaticResource itemsViewSource}}"
-            ItemTemplate="{StaticResource Standard250x250ItemTemplate}"
             SelectionMode="None"
             IsSwipeEnabled="false"
             IsItemClickEnabled="True"
-            ItemClick="ItemView_ItemClick"/>
+            ItemClick="ItemView_ItemClick" Grid.Row="3" Grid.ColumnSpan="4" Grid.Column="4">
+            <Button Content="1" />
+            <Button Content="2" />
+            <Button Content="3"/>
+            <Button Content="4"/>
+            <Button Content="5"/>
+            <Button Content="6"/>
+            <Button Content="7"/>
+            <Button Content="8"/>
+            <Button Content="9"/>
+            <Button Content="10"/>
+            <Button Content="11"/>
+            <Button Content="12"/>
+        </GridView>
 
         <!-- Vertical scrolling list only used when snapped -->
         <ListView

@@ -31,6 +31,8 @@ namespace Tuple.UI.Split
     {
 
         private IGame game; 
+        private List<ICardWithPosition>  cardsWithPosition = new List<ICardWithPosition>();
+
         public ItemsPage()
         {
             MetroEventSource.Log.Debug("Initializing the ItemsPage");
@@ -50,22 +52,31 @@ namespace Tuple.UI.Split
         protected override void LoadState(Object navigationParameter, Dictionary<String, Object> pageState)
         {
             // TODO: Create an appropriate data model for your problem domain to replace the sample data
-            var sampleDataGroups = SampleDataSource.GetGroups((String)navigationParameter);
-            this.DefaultViewModel["Items"] = sampleDataGroups;
+            //var sampleDataGroups = SampleDataSource.GetGroups((String)navigationParameter);
+            //this.DefaultViewModel["Items"] = sampleDataGroups;
 
-            //ICardWithPosition cardWithPosition;
+            
 
-            //do
-            //{
-            //    cardWithPosition = game.OpenCard();
+            //this.ite
+            //this.itemGridView.Items.
 
+            int counter = 0;
+            while( game.ShouldOpenCard())
+            {
+                var card = game.OpenCard();
+                if(card != null)
+                {
+                    cardsWithPosition.Add(card);
+                    var b = (Button)this.itemGridView.Items[counter];
+                    counter++;
+                    b.Content = card.ToString();
+                    
 
-            //    if (card != null)
-            //    {
-            //        //add to deck
-            //    }
+                    //TODO: do logic
+                }
 
-            //} while (card != null);
+            }
+
         }
 
         /// <summary>
@@ -78,41 +89,44 @@ namespace Tuple.UI.Split
         {
             // Navigate to the appropriate destination page, configuring the new page
             // by passing required information as a navigation parameter
-            var groupId = ((SampleDataGroup)e.ClickedItem).UniqueId;
+            //var groupId = ((SampleDataGroup)e.ClickedItem).UniqueId;
             //this.Frame.Navigate(typeof(SplitPage), groupId);
 
-            var item = e.ClickedItem as SampleDataGroup;
-            item.Title = "Click ";
-            item.Subtitle = "Click ";
+            var button = e.ClickedItem as Button;
+            //item.Title = "Click ";
+            //item.Subtitle = "Click ";
+            button.ClickMode = ClickMode.Press;
 
+            //button.BorderBrush = new SolidColorBrush(new Windows.UI.Color);
+            //if(button
 
-            ////if (game.RemoveSet(new Position(0, 0), new Position(0, 1), new Position(0, 2)))
+            if(game.RemoveSet(cardsWithPosition[0], cardsWithPosition[1],cardsWithPosition[2]))
+            {
+                //cardsWithPosition.Remove
+                while( game.ShouldOpenCard())
+                {
+                    var card = game.OpenCard();
+                    if(card != null)
+                    {
+                        cardsWithPosition.Add(card);
 
-            //{
-            //    //Remove cards
+                        //button.Title = card.ToString();
+                        //button.Subtitle = card.Position.ToString();
+                        //TODO: do logic
+                    }
 
-            //    ICardWithPosition cardWithPosition;
-
-            //    do
-            //    {
-            //        cardWithPosition = game.OpenCard();
-
-            //        if (card != null)
-            //        {
-            //            //add to deck
-            //        }
-
-            //    } while (card != null);
-
-
-            //}
+                }
+            }
+            
             game.IsGameOver();
             
 
-            MetroEventSource.Log.Debug("Item clicked: " + item.UniqueId);
+            MetroEventSource.Log.Debug("Item clicked: " + button);
 
 
         }
+
+
 
     }
 }
