@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Tuple.Logic.Interfaces;
 using System.Linq;
+using System;
 
 namespace Tuple.Logic.Common
 {
@@ -39,6 +40,29 @@ namespace Tuple.Logic.Common
             }
 
             return false;
+        }
+    
+        public static Tuple<IPosition, IPosition, IPosition> FindLegalSet(IEnumerable<ICardWithPosition> cards)
+        {
+            var cs = cards.Select(c => c.Card).ToArray();
+            var ps = cards.Select(c => c.Position).ToArray();
+            var count = cs.Count();
+
+            for (int i = 0; i < count; i++)
+            {
+                for (int j = i + 1; j < count; j++)
+                {
+                    for (int k = j + 1; k < count; k++)
+                    {
+                        if (isLegalSet(cs[i], cs[j], cs[k]))
+                        {
+                            return new Tuple<IPosition,IPosition,IPosition>(ps[i], ps[j], ps[k]);
+                        }
+                    }
+                }
+            }
+
+            return null;
         }
     }
 }

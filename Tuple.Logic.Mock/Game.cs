@@ -8,8 +8,8 @@ namespace Tuple.Logic.Mock
 {
     public class Game : IGame
     {
-        private const ushort rows = 6;
-        public const ushort cols = 3;
+        private const ushort rows = 3;
+        public const ushort cols = 6;
 
         private IDeck deck;
         private Board board;
@@ -82,6 +82,16 @@ namespace Tuple.Logic.Mock
 
                 board[position] = newCard;
 
+                if (Util.isThereSet(GetAllOpenedCards()))
+                {
+                    var set = Util.FindLegalSet(GetAllOpenedCards());
+                    MetroEventSource.Log.Debug(set.Item1 + " - " + set.Item2 + " - " + set.Item3);
+                }
+                else
+                {
+                    MetroEventSource.Log.Debug("GAME: No set on board.");
+                }
+
                 return new CardWithPosition(newCard, position);
             }
         }
@@ -147,9 +157,9 @@ namespace Tuple.Logic.Mock
 
         private Position FindOpenSpace()
         {
-            for (ushort i = 0; i < rows; i++)
+            for (ushort j = 0; j < cols; j++)
             {
-                for (ushort j = 0; j < cols; j++)
+                for (ushort i = 0; i < rows; i++)
                 {
                     if (board[i, j] == null)
                     {
