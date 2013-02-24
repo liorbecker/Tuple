@@ -15,7 +15,7 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="Tuple.UI.Split.App">
-      <VisualElements DisplayName="Tuple.UI.Split" Logo="Assets\Logo.png" SmallLogo="Assets\SmallLogo.png" Description="Tuple.UI.Split" ForegroundText="light" BackgroundColor="#464646">
+      <VisualElements DisplayName="SET" Logo="Assets\Logo.png" SmallLogo="Assets\SmallLogo.png" Description="SET Game" ForegroundText="light" BackgroundColor="#464646">
         <DefaultTile ShowName="allLogos" ShortName="Tuple" />
         <SplashScreen Image="Assets\SplashScreen.png" />
         <InitialRotationPreference>
