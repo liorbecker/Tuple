@@ -57,7 +57,6 @@ namespace Tuple.UI.Split
         /// session.  This will be null the first time a page is visited.</param>
         protected override void LoadState(Object navigationParameter, Dictionary<String, Object> pageState)
         {
-
             orderButtinDic[0] = Button0;
             orderButtinDic[1] = Button1;
             orderButtinDic[2] = Button2;
@@ -72,11 +71,12 @@ namespace Tuple.UI.Split
             orderButtinDic[11] = Button11;
             orderButtinDic[12] = Button12;
             orderButtinDic[13] = Button13;
-            orderButtinDic[14] = Button14; 
+            orderButtinDic[14] = Button14;
+            orderButtinDic[15] = Button15;
+            orderButtinDic[16] = Button16;
+            orderButtinDic[17] = Button17;
 
             brushOriginal = Button1.BorderBrush;
-
-
         }
 
         /// <summary>
@@ -91,22 +91,15 @@ namespace Tuple.UI.Split
 
         private async void Grid_Loaded_1(object sender, RoutedEventArgs e)
         {
-            
-           
-
             while (game.ShouldOpenCard() ) 
             {
-              
-  
                 await Task.Delay(delaymilisec);
                 var card = game.OpenCard();
                 var position = (uint)card.Position.Row + (uint)card.Position.Col*3;
 
                 orderButtinDic[position].Visibility = Windows.UI.Xaml.Visibility.Visible;
                 orderButtinDic[position].Content = card;
-
             }
-
         }
 
 
@@ -133,7 +126,7 @@ namespace Tuple.UI.Split
                     
                 }
 
-                //Check for 3sum
+                //Check for 3 SET
                 if (presedButtonsWithPosition.Count == 3)
                 {
                     if (game.RemoveSet(presedButtonsWithPosition[0].Content as ICardWithPosition,
@@ -143,10 +136,10 @@ namespace Tuple.UI.Split
 
                         //Hide the 3 cards
                         presedButtonsWithPosition[0].Visibility = Visibility.Collapsed;
-                        Task.Delay(delaymilisec);
                         presedButtonsWithPosition[1].Visibility = Visibility.Collapsed;
-                        Task.Delay(delaymilisec);
                         presedButtonsWithPosition[2].Visibility = Visibility.Collapsed;
+
+                        presedButtonsWithPosition.Clear();
 
                         //Check if game is over
                         if (game.IsGameOver())
@@ -158,32 +151,15 @@ namespace Tuple.UI.Split
                         ////////////////////////////
                         //Open new cards
                         //match  - remove 3 cards
-                        if (game.ShouldOpenCard())
+                        while (game.ShouldOpenCard())
                         {
                             await Task.Delay(delaymilisec);
-                            //await Task.Delay(delaymilisec);
-                            presedButtonsWithPosition[0].Content = game.OpenCard();
-                            presedButtonsWithPosition[0].Visibility = Visibility.Visible;
-                            presedButtonsWithPosition[0].BorderBrush = brushOriginal;
-                        }
-                        if (game.ShouldOpenCard())
-                        {
-                            await Task.Delay(delaymilisec);
-                            //await Task.Delay(delaymilisec);
-                            presedButtonsWithPosition[1].Content = game.OpenCard();
-                            presedButtonsWithPosition[1].Visibility = Visibility.Visible;
-                            presedButtonsWithPosition[1].BorderBrush = brushOriginal;
-                            
-                        }
-
-                        if (game.ShouldOpenCard())
-                        {
-                            await Task.Delay(delaymilisec);
-                            //await Task.Delay(delaymilisec);
-                            presedButtonsWithPosition[2].Content = game.OpenCard();
-                            presedButtonsWithPosition[2].Visibility = Visibility.Visible;
-                            presedButtonsWithPosition[2].BorderBrush = brushOriginal;
-                            
+                            var card = game.OpenCard();
+                            var position = (uint)card.Position.Row + (uint)card.Position.Col * 3;
+                            //Open the Card
+                            orderButtinDic[position].Content = card;
+                            orderButtinDic[position].BorderBrush = brushOriginal;
+                            orderButtinDic[position].Visibility = Windows.UI.Xaml.Visibility.Visible;
                         }
                     }
                 }
