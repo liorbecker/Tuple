@@ -27,6 +27,15 @@
             <Setter Property="BorderBrush" Value="Black"/>
             <Setter Property="Background" Value="Gray"/>
             <Setter Property="Visibility" Value="Collapsed"/>
+            <Setter Property="Transitions">
+                <Setter.Value>
+                    <TransitionCollection>
+                        <EntranceThemeTransition FromHorizontalOffset="500" IsStaggeringEnabled="True"/>
+                        <!--<PopupThemeTransition/>-->
+                        <!--<AddDeleteThemeTransition/>-->
+                    </TransitionCollection>
+                </Setter.Value>
+            </Setter>
         </Style>
     </Page.Resources>
 
@@ -73,7 +82,15 @@
             
         </Grid>
  
-        <Grid Grid.Row="1" Loaded="Grid_Loaded_1" Margin="50">
+        <Grid Grid.Row="1" Loaded="Grid_Loaded_1" Margin="50" x:Name="Grid_Button">
+            <!--<Grid.Resources>
+                <Storyboard x:Name="ExitStoryboard">
+                    <FadeOutThemeAnimation Storyboard.TargetName="Button9" Duration="999" />
+                </Storyboard>
+                <Storyboard x:Name="EnterStoryboard">
+                    <FadeInThemeAnimation Storyboard.TargetName="Button9" />
+                </Storyboard>
+            </Grid.Resources>-->
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*" />
                 <ColumnDefinition Width="3*" />

@@ -20,6 +20,7 @@ using Tuple.Logic.Mock;
 using Tuple.Logic.Interfaces;
 using System.Threading.Tasks;
 using Windows.UI;
+using Windows.UI.Xaml.Media.Animation;
 
 // The Items Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234233
 
@@ -93,7 +94,7 @@ namespace Tuple.UI.Split
         {
             while (game.ShouldOpenCard() ) 
             {
-                await Task.Delay(delaymilisec);
+                //await Task.Delay(delaymilisec);
                 var card = game.OpenCard();
                 var position = (uint)card.Position.Row + (uint)card.Position.Col*3;
 
@@ -105,6 +106,7 @@ namespace Tuple.UI.Split
 
         private async void ButtonN_Click(object sender, RoutedEventArgs e)
         {
+
             //lock (game)
             {
 
@@ -134,10 +136,14 @@ namespace Tuple.UI.Split
                         presedButtonsWithPosition[2].Content as ICardWithPosition))
                     {
 
+                        //Fade 3 cards out
+                        FadeOutCards(presedButtonsWithPosition[0].Name, presedButtonsWithPosition[1].Name, presedButtonsWithPosition[2].Name);
+                        await Task.Delay(100);
+
                         //Hide the 3 cards
-                        presedButtonsWithPosition[0].Visibility = Visibility.Collapsed;
-                        presedButtonsWithPosition[1].Visibility = Visibility.Collapsed;
-                        presedButtonsWithPosition[2].Visibility = Visibility.Collapsed;
+                        //presedButtonsWithPosition[0].Visibility = Visibility.Collapsed;
+                        //presedButtonsWithPosition[1].Visibility = Visibility.Collapsed;
+                        //presedButtonsWithPosition[2].Visibility = Visibility.Collapsed;
 
                         presedButtonsWithPosition.Clear();
 
@@ -160,6 +166,7 @@ namespace Tuple.UI.Split
                             orderButtinDic[position].Content = card;
                             orderButtinDic[position].BorderBrush = brushOriginal;
                             orderButtinDic[position].Visibility = Windows.UI.Xaml.Visibility.Visible;
+                            FadeInCard(orderButtinDic[position].Name);
                         }
                     }
                 }
@@ -186,6 +193,63 @@ namespace Tuple.UI.Split
             myTextBlock.Text = "Seconds: " + tickinsec++.ToString();
         }
         #endregion 
+
+        #region Animation Procedure
+        private void FadeOutCards(String b1, String b2, String b3)
+        {
+           
+            // Create a duration of 2 seconds.
+            Duration duration = new Duration(TimeSpan.FromSeconds(25));
+
+            // Create two DoubleAnimations and set their properties.
+            FadeOutThemeAnimation fOut1 = new FadeOutThemeAnimation();
+            FadeOutThemeAnimation fOut2 = new FadeOutThemeAnimation();
+            FadeOutThemeAnimation fOut3 = new FadeOutThemeAnimation();
+
+            fOut1.TargetName = b1;
+            fOut1.Duration = duration;
+            fOut2.TargetName = b2;
+            fOut2.Duration = duration;
+            fOut3.TargetName = b3;
+            fOut3.Duration = duration;
+            
+            Storyboard sb = new Storyboard();
+            sb.Duration = duration;
+            sb.Children.Add(fOut1);
+            sb.Children.Add(fOut2);
+            sb.Children.Add(fOut3);
+
+
+            // Make the Storyboard a resource.
+            Grid_Button.Resources["unique_id_out"] = sb;
+
+            // Begin the animation.
+            sb.Begin();
+        }
+
+        private void FadeInCard(String b1)
+        {
+
+            // Create a duration of 2 seconds.
+            Duration duration = new Duration(TimeSpan.FromSeconds(25));
+
+            // Create two DoubleAnimations and set their properties.
+            FadeInThemeAnimation fIn = new FadeInThemeAnimation();
+            fIn.TargetName = b1;
+            fIn.Duration = duration;
+
+            Storyboard sb = new Storyboard();
+            sb.Duration = duration;
+            sb.Children.Add(fIn);
+
+
+            // Make the Storyboard a resource.
+            Grid_Button.Resources["unique_id_in"] = sb;
+
+            // Begin the animation.
+            sb.Begin();
+        }
+        #endregion
 
     }
 }
