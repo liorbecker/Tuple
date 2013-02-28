@@ -34,6 +34,9 @@ namespace Tuple.Infra.Log
         /// 
         private string m_FormatHtml = "<table><tr><td width=\"200\"><font face=Arial size=3 color={3}>{0:yyyy-MM-dd HH\\:mm\\:ss\\:ffff}</td><td width=\"100\"><font face=Arial size=3 color={3}>{1}</td><td width=\"1000\"><font face=Arial size=3 color={3}>'{2}'</td></tr></font>";
 
+
+        private String m_AutoRefresh = "<html><head><title>SET Log file</title><meta http-equiv=\"refresh\" content=\"1\">";
+
         private SemaphoreSlim m_SemaphoreSlim = new SemaphoreSlim(1);
 
         public StorageFileEventListener(string name)
@@ -46,8 +49,23 @@ namespace Tuple.Infra.Log
 
         private async void AssignLocalFile()
         {
-            m_StorageFile = await ApplicationData.Current.LocalFolder.CreateFileAsync(m_Name.Replace(" ", "_") + ".html",
-                                                                                      CreationCollisionOption.OpenIfExists);
+
+            try
+            {
+                m_StorageFile = await ApplicationData.Current.LocalFolder.GetFileAsync(m_Name.Replace(" ", "_") + ".html");
+            }
+            catch (Exception) 
+            {
+                //File Not found
+            }
+
+            if (m_StorageFile == null)
+            {
+                m_StorageFile = await ApplicationData.Current.LocalFolder.CreateFileAsync(m_Name.Replace(" ", "_") + ".html",CreationCollisionOption.OpenIfExists);
+                WriteToFile(m_AutoRefresh);
+            }
+
+
             Debug.WriteLine("StorageFileEventListener path =  {0} ", m_StorageFile.Path);
 
 
