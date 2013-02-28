@@ -3,7 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Tuple.UI.Split"
-    xmlns:localData="using:Tuple.UI.Split.Data" RequestedTheme="Dark">
+    xmlns:localData="using:Tuple.UI.Split.Data" RequestedTheme="Light">
 
     <Application.Resources>
         <ResourceDictionary>
@@ -18,7 +18,7 @@
 
             <!-- Application-specific resources -->
 
-            <x:String x:Key="AppName">Tuple</x:String>
+            <x:String x:Key="AppName">SET</x:String>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

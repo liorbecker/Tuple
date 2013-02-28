@@ -24,9 +24,10 @@
             <Setter Property="Margin" Value="10"/>
             <Setter Property="FontSize" Value="8"/>
             <Setter Property="Foreground" Value="{StaticResource ApplicationHeaderForegroundThemeBrush}"/>
-            <Setter Property="BorderBrush" Value="Black"/>
-            <Setter Property="Background" Value="Gray"/>
+            <!--<Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="Background" Value="Gray"/>-->
             <Setter Property="Visibility" Value="Collapsed"/>
+            <Setter Property="BorderThickness" Value="3"/>
             <Setter Property="Transitions">
                 <Setter.Value>
                     <TransitionCollection>
@@ -78,19 +79,12 @@
             </Grid.ColumnDefinitions>
             <TextBlock Loaded="StartTimer"  Grid.Column="2"  x:Name="myTextBlock" Style="{StaticResource BaselineTextStyle}" VerticalAlignment="Center" HorizontalAlignment="Left" Text="Timer" />
             <Button x:Name="backButton" Click="GoBack" IsEnabled="{Binding Frame.CanGoBack, ElementName=pageRoot}" Style="{StaticResource BackButtonStyle}"/>
-            <TextBlock x:Name="pageTitle" Grid.Column="1" Text="Tuple" IsHitTestVisible="false" Style="{StaticResource PageHeaderTextStyle}"/>
+            <TextBlock x:Name="pageTitle" Grid.Column="1" IsHitTestVisible="false" Style="{StaticResource PageHeaderTextStyle}" Text="SET" Margin="0,0,979,40"/>
             
+
         </Grid>
  
-        <Grid Grid.Row="1" Loaded="Grid_Loaded_1" Margin="50" x:Name="Grid_Button">
-            <!--<Grid.Resources>
-                <Storyboard x:Name="ExitStoryboard">
-                    <FadeOutThemeAnimation Storyboard.TargetName="Button9" Duration="999" />
-                </Storyboard>
-                <Storyboard x:Name="EnterStoryboard">
-                    <FadeInThemeAnimation Storyboard.TargetName="Button9" />
-                </Storyboard>
-            </Grid.Resources>-->
+        <Grid Grid.Row="1" Loaded="Grid_Loaded_1" Margin="50" x:Name="Grid_Button" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*" />
                 <ColumnDefinition Width="3*" />

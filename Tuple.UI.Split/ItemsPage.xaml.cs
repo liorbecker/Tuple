@@ -36,7 +36,8 @@ namespace Tuple.UI.Split
         private IGame game;
         private List<Button> presedButtonsWithPosition = new List<Button>();
         private Dictionary<uint, Button> orderButtinDic = new Dictionary<uint, Button>();
-        private SolidColorBrush brushYellowGreen = new SolidColorBrush(Colors.YellowGreen);
+        private SolidColorBrush brushYellowGreen = new SolidColorBrush(new Windows.UI.Color() { A = 0xFF, R = 0x00, G = 0xb2, B = 0xf0 });
+        //#00b2f0
         private Brush brushOriginal;
         private readonly int delaymilisec = 400;
 
@@ -140,11 +141,7 @@ namespace Tuple.UI.Split
                         FadeOutCards(presedButtonsWithPosition[0].Name, presedButtonsWithPosition[1].Name, presedButtonsWithPosition[2].Name);
                         await Task.Delay(100);
 
-                        //Hide the 3 cards
-                        //presedButtonsWithPosition[0].Visibility = Visibility.Collapsed;
-                        //presedButtonsWithPosition[1].Visibility = Visibility.Collapsed;
-                        //presedButtonsWithPosition[2].Visibility = Visibility.Collapsed;
-
+                     
                         presedButtonsWithPosition.Clear();
 
                         //Check if game is over
