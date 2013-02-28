@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.UI;
 using System.Diagnostics;
+using Windows.ApplicationModel.DataTransfer;
 
 
 namespace Tuple.Infra.Log
@@ -48,6 +49,15 @@ namespace Tuple.Infra.Log
             m_StorageFile = await ApplicationData.Current.LocalFolder.CreateFileAsync(m_Name.Replace(" ", "_") + ".html",
                                                                                       CreationCollisionOption.OpenIfExists);
             Debug.WriteLine("StorageFileEventListener path =  {0} ", m_StorageFile.Path);
+
+
+            /////////////////////////
+            //Add file name to clip board
+            DataPackage dataPackage = new DataPackage();
+            dataPackage.RequestedOperation = DataPackageOperation.Copy;
+            dataPackage.SetText(m_StorageFile.Path);
+            Clipboard.SetContent(dataPackage);
+
         }
 
 
@@ -78,7 +88,7 @@ namespace Tuple.Infra.Log
                 return;
 
             var newFormatedLine = string.Format(m_FormatHtml, DateTime.Now, eventData.Level, eventData.Payload[0],SevirityToColor(eventData.Level));
-            Debug.WriteLine(newFormatedLine);
+            //Debug.WriteLine(newFormatedLine);
             WriteToFile(newFormatedLine);
         }
 
