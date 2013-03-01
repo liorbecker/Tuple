@@ -49,6 +49,7 @@ namespace Tuple.Infra.Log
 
         private async void AssignLocalFile()
         {
+            
 
             try
             {
@@ -68,13 +69,20 @@ namespace Tuple.Infra.Log
 
             Debug.WriteLine("StorageFileEventListener path =  {0} ", m_StorageFile.Path);
 
-
-            /////////////////////////
-            //Add file name to clip board
-            DataPackage dataPackage = new DataPackage();
-            dataPackage.RequestedOperation = DataPackageOperation.Copy;
-            dataPackage.SetText(m_StorageFile.Path);
-            Clipboard.SetContent(dataPackage);
+            try
+            {
+                /////////////////////////
+                //Add file name to clip board
+                DataPackage dataPackage = new DataPackage();
+                dataPackage.RequestedOperation = DataPackageOperation.Copy;
+                dataPackage.SetText(m_StorageFile.Path);
+                Clipboard.SetContent(dataPackage);
+            }
+            catch (Exception exp)
+            {
+                WriteToFile(exp.Message);
+            }
+            
 
         }
 
