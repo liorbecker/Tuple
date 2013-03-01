@@ -21,6 +21,7 @@ using Tuple.Logic.Interfaces;
 using System.Threading.Tasks;
 using Windows.UI;
 using Windows.UI.Xaml.Media.Animation;
+using Windows.UI.Popups;
 
 // The Items Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234233
 
@@ -91,26 +92,32 @@ namespace Tuple.UI.Split
         {
         }
 
-        private async void Grid_Loaded_1(object sender, RoutedEventArgs e)
+        private void Grid_Loaded_1(object sender, RoutedEventArgs e)
         {
             while (game.ShouldOpenCard() ) 
             {
-                //await Task.Delay(delaymilisec);
                 var card = game.OpenCard();
                 var position = (uint)card.Position.Row + (uint)card.Position.Col*3;
 
                 orderButtinDic[position].Visibility = Windows.UI.Xaml.Visibility.Visible;
-                orderButtinDic[position].Content = card;
+                //orderButtinDic[position].Content = card;
+                ((TextBlock)((StackPanel)orderButtinDic[position].Content).Children[0]).Text = card.ToString();
+                ((Button)((StackPanel)orderButtinDic[position].Content).Children[2]).Content = card;
+
             }
         }
 
+
+        private ICardWithPosition GetCardFromButton(Button b)
+        {
+            return ((Button)((StackPanel)b.Content).Children[2]).Content as ICardWithPosition;
+        }
 
         private async void ButtonN_Click(object sender, RoutedEventArgs e)
         {
 
             //lock (game)
             {
-
                 var button = (Button)e.OriginalSource;
 
                 //Flip color BorderBrush 
@@ -132,9 +139,9 @@ namespace Tuple.UI.Split
                 //Check for 3 SET
                 if (presedButtonsWithPosition.Count == 3)
                 {
-                    if (game.RemoveSet(presedButtonsWithPosition[0].Content as ICardWithPosition,
-                        presedButtonsWithPosition[1].Content as ICardWithPosition,
-                        presedButtonsWithPosition[2].Content as ICardWithPosition))
+                    if (game.RemoveSet(GetCardFromButton(presedButtonsWithPosition[0]) ,
+                        GetCardFromButton(presedButtonsWithPosition[1]),
+                        GetCardFromButton(presedButtonsWithPosition[2])))
                     {
 
                         ////////
@@ -152,7 +159,10 @@ namespace Tuple.UI.Split
                         if (game.IsGameOver())
                         {
                             this.pageTitle.Text = "Game finished!";
-                            //TODO: game finished
+                            MessageDialog md = new MessageDialog(TimerTextBox.Text + Environment.NewLine + SetFoundTextBlock.Text, "Game completed");
+                            md.Commands.Add(new UICommand("OK"));
+                            await md.ShowAsync();
+                            //TODO: init new Game
                         }
 
                         ////////////////////////////
@@ -164,7 +174,9 @@ namespace Tuple.UI.Split
                             var card = game.OpenCard();
                             var position = (uint)card.Position.Row + (uint)card.Position.Col * 3;
                             //Open the Card
-                            orderButtinDic[position].Content = card;
+                            //orderButtinDic[position].Content = card;
+                            ((TextBlock)((StackPanel)orderButtinDic[position].Content).Children[0]).Text = card.ToString();
+                            ((Button)((StackPanel)orderButtinDic[position].Content).Children[2]).Content = card;
                             orderButtinDic[position].BorderBrush = brushOriginal;
                             orderButtinDic[position].Visibility = Windows.UI.Xaml.Visibility.Visible;
                             FadeInCard(orderButtinDic[position].Name);
@@ -194,7 +206,7 @@ namespace Tuple.UI.Split
 
             //TimeSpan t = new TimeSpan(0, 0, 0, tickinsec++);
 
-            TimerTextBox.Text = "Seconds: " + TimeSpan.FromSeconds(++tickinsec).ToString();
+            TimerTextBox.Text = "Time: " + TimeSpan.FromSeconds(++tickinsec).ToString();
         }
         #endregion 
 

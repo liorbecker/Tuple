@@ -100,24 +100,133 @@
                 <RowDefinition Height="3*"/>
                 <RowDefinition Height="3*"/>
             </Grid.RowDefinitions>
-            <Button Grid.Row="0" Grid.Column="0" x:Name="Button0" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click"/>
-            <Button Grid.Row="1" Grid.Column="0" x:Name="Button1" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click"/>
-            <Button Grid.Row="2" Grid.Column="0" x:Name="Button2" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click"/>
-            <Button Grid.Row="0" Grid.Column="1" x:Name="Button3" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click"/>
-            <Button Grid.Row="1" Grid.Column="1" x:Name="Button4" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click"/>
-            <Button Grid.Row="2" Grid.Column="1" x:Name="Button5" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click"/>
-            <Button Grid.Row="0" Grid.Column="2" x:Name="Button6" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click"/>
-            <Button Grid.Row="1" Grid.Column="2" x:Name="Button7" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click"/>
-            <Button Grid.Row="2" Grid.Column="2" x:Name="Button8" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click"/>
-            <Button Grid.Row="0" Grid.Column="3" x:Name="Button9" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click"/>
-            <Button Grid.Row="1" Grid.Column="3" x:Name="Button10" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click"/>
-            <Button Grid.Row="2" Grid.Column="3" x:Name="Button11" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click"/>
-            <Button Grid.Row="0" Grid.Column="4" x:Name="Button12" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click"/>
-            <Button Grid.Row="1" Grid.Column="4" x:Name="Button13" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click"/>
-            <Button Grid.Row="2" Grid.Column="4" x:Name="Button14" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click"/>
-            <Button Grid.Row="0" Grid.Column="5" x:Name="Button15" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click"/>
-            <Button Grid.Row="1" Grid.Column="5" x:Name="Button16" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click"/>
-            <Button Grid.Row="2" Grid.Column="5" x:Name="Button17" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click"/>
+            <Button Grid.Row="0" Grid.Column="0" x:Name="Button0" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click">
+                <StackPanel Background="#00b2f0" >
+                    <TextBlock Text="title" Margin="3,-7,10,10"  />
+                    <Image Source="Assets/cardDemo.png" Margin="2" Stretch="None"  />
+                    <Button Visibility="Collapsed" />
+                </StackPanel>
+            </Button>
+            <Button Grid.Row="1" Grid.Column="0" x:Name="Button1" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click">
+                <StackPanel Background="#00b2f0"  >
+                    <TextBlock Text="title" Margin="3,-7,10,10"  />
+                    <Image Source="Assets/cardDemo.png" Margin="2" Stretch="None"  />
+                    <Button Visibility="Collapsed" />
+                </StackPanel>
+            </Button>
+            <Button Grid.Row="2" Grid.Column="0" x:Name="Button2" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click">
+                <StackPanel Background="#00b2f0"  >
+                    <TextBlock Text="title" Margin="3,-7,10,10"  />
+                    <Image Source="Assets/cardDemo.png" Margin="2" Stretch="None" />
+                    <Button Visibility="Collapsed" />
+                </StackPanel>
+            </Button>
+            <Button Grid.Row="0" Grid.Column="1" x:Name="Button3" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click">
+                <StackPanel Background="#00b2f0"  >
+                    <TextBlock Text="title" Margin="3,-7,10,10"  />
+                    <Image Source="Assets/cardDemo.png" Margin="2" Stretch="None" />
+                    <Button Visibility="Collapsed" />
+                </StackPanel>
+            </Button>
+            <Button Grid.Row="1" Grid.Column="1" x:Name="Button4" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click">
+                <StackPanel Background="#00b2f0"  >
+                    <TextBlock Text="title" Margin="3,-7,10,10"  />
+                    <Image Source="Assets/cardDemo.png" Margin="2"  Stretch="None"/>
+                    <Button Visibility="Collapsed" />
+                </StackPanel>
+            </Button>
+            <Button Grid.Row="2" Grid.Column="1" x:Name="Button5" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click">
+                <StackPanel Background="#00b2f0"  >
+                    <TextBlock Text="title" Margin="3,-7,10,10"  />
+                    <Image Source="Assets/cardDemo.png" Margin="2" Stretch="None" />
+                    <Button Visibility="Collapsed" />
+                </StackPanel>
+            </Button>
+            <Button Grid.Row="0" Grid.Column="2" x:Name="Button6" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click">
+                <StackPanel Background="#00b2f0"  >
+                    <TextBlock Text="title" Margin="3,-7,10,10"  />
+                    <Image Source="Assets/cardDemo.png" Margin="2" Stretch="None" />
+                    <Button Visibility="Collapsed" />
+                </StackPanel>
+            </Button>
+            <Button Grid.Row="1" Grid.Column="2" x:Name="Button7" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click">
+                <StackPanel Background="#00b2f0"  >
+                    <TextBlock Text="title" Margin="3,-7,10,10"  />
+                    <Image Source="Assets/cardDemo.png" Margin="2" Stretch="None" />
+                    <Button Visibility="Collapsed" />
+                </StackPanel>
+            </Button>
+            <Button Grid.Row="2" Grid.Column="2" x:Name="Button8" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click">
+                <StackPanel Background="#00b2f0"  >
+                    <TextBlock Text="title" Margin="3,-7,10,10"  />
+                    <Image Source="Assets/cardDemo.png" Margin="2" Stretch="None" />
+                    <Button Visibility="Collapsed" />
+                </StackPanel>
+            </Button>
+            <Button Grid.Row="0" Grid.Column="3" x:Name="Button9" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click">
+                <StackPanel Background="#00b2f0"  >
+                    <TextBlock Text="title" Margin="3,-7,10,10"  />
+                    <Image Source="Assets/cardDemo.png" Margin="2" Stretch="None" />
+                    <Button Visibility="Collapsed" />
+                </StackPanel>
+            </Button>
+            <Button Grid.Row="1" Grid.Column="3" x:Name="Button10" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click">
+                <StackPanel Background="#00b2f0"  >
+                    <TextBlock Text="title" Margin="3,-7,10,10"  />
+                    <Image Source="Assets/cardDemo.png" Margin="2" Stretch="None" />
+                    <Button Visibility="Collapsed" />
+                </StackPanel>
+            </Button>
+            <Button Grid.Row="2" Grid.Column="3" x:Name="Button11" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click">
+                <StackPanel Background="#00b2f0"  >
+                    <TextBlock Text="title" Margin="3,-7,10,10"  />
+                    <Image Source="Assets/cardDemo.png" Margin="2" Stretch="None" />
+                    <Button Visibility="Collapsed" />
+                </StackPanel>
+            </Button>
+            <Button Grid.Row="0" Grid.Column="4" x:Name="Button12" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click">
+                <StackPanel Background="#00b2f0"  >
+                    <TextBlock Text="title" Margin="3,-7,10,10"  />
+                    <Image Source="Assets/cardDemo.png" Margin="2" Stretch="None" />
+                    <Button Visibility="Collapsed" />
+                </StackPanel>
+            </Button>
+            <Button Grid.Row="1" Grid.Column="4" x:Name="Button13" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click">
+                <StackPanel Background="#00b2f0"  >
+                    <TextBlock Text="title" Margin="3,-7,10,10"  />
+                    <Image Source="Assets/cardDemo.png" Margin="2" Stretch="None" />
+                    <Button Visibility="Collapsed" />
+                </StackPanel>
+            </Button>
+            <Button Grid.Row="2" Grid.Column="4" x:Name="Button14" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click">
+                <StackPanel Background="#00b2f0"  >
+                    <TextBlock Text="title" Margin="3,-7,10,10"  />
+                    <Image Source="Assets/cardDemo.png" Margin="2" Stretch="None" />
+                    <Button Visibility="Collapsed" />
+                </StackPanel>
+            </Button>
+            <Button Grid.Row="0" Grid.Column="5" x:Name="Button15" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click">
+                <StackPanel Background="#00b2f0"  >
+                    <TextBlock Text="title" Margin="3,-7,10,10"  />
+                    <Image Source="Assets/cardDemo.png" Margin="2" Stretch="None" />
+                    <Button Visibility="Collapsed" />
+                </StackPanel>
+            </Button>
+            <Button Grid.Row="1" Grid.Column="5" x:Name="Button16" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click">
+                <StackPanel Background="#00b2f0"  >
+                    <TextBlock Text="title" Margin="3,-7,10,10"  />
+                    <Image Source="Assets/cardDemo.png" Margin="2" Stretch="None" />
+                    <Button Visibility="Collapsed" />
+                </StackPanel>
+            </Button>
+            <Button Grid.Row="2" Grid.Column="5" x:Name="Button17" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click">
+                <StackPanel Background="#00b2f0"  >
+                    <TextBlock Text="title" Margin="3,-7,10,10"  />
+                    <Image Source="Assets/cardDemo.png" Margin="2" Stretch="None" />
+                    <Button Visibility="Collapsed" />
+                </StackPanel>
+            </Button>
+
         </Grid>
       
 
