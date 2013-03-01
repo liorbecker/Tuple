@@ -37,9 +37,9 @@ namespace Tuple.UI.Split
         private List<Button> presedButtonsWithPosition = new List<Button>();
         private Dictionary<uint, Button> orderButtinDic = new Dictionary<uint, Button>();
         private SolidColorBrush brushYellowGreen = new SolidColorBrush(new Windows.UI.Color() { A = 0xFF, R = 0x00, G = 0xb2, B = 0xf0 });
-        //#00b2f0
         private Brush brushOriginal;
         private readonly int delaymilisec = 400;
+        private uint setFoundCounter = 0;
 
         public ItemsPage()
         {
@@ -137,6 +137,10 @@ namespace Tuple.UI.Split
                         presedButtonsWithPosition[2].Content as ICardWithPosition))
                     {
 
+                        ////////
+                        //Inc counter
+                        SetFoundTextBlock.Text = "SET Found: " + ++setFoundCounter;
+
                         //Fade 3 cards out
                         FadeOutCards(presedButtonsWithPosition[0].Name, presedButtonsWithPosition[1].Name, presedButtonsWithPosition[2].Name);
                         await Task.Delay(100);
@@ -187,7 +191,10 @@ namespace Tuple.UI.Split
         // Raised every 100 miliseconds while the DispatcherTimer is active.
         public void Each_Tick(object o, object sender)
         {
-            myTextBlock.Text = "Seconds: " + tickinsec++.ToString();
+
+            //TimeSpan t = new TimeSpan(0, 0, 0, tickinsec++);
+
+            TimerTextBox.Text = "Seconds: " + TimeSpan.FromSeconds(++tickinsec).ToString();
         }
         #endregion 
 

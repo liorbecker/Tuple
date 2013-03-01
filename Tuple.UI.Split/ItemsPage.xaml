@@ -71,16 +71,17 @@
             ItemClick="ItemView_ItemClick"/>
 
         <!-- Back button and page title -->
-        <Grid>
+        <Grid HorizontalAlignment="Left" Width="1366">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Loaded="StartTimer"  Grid.Column="2"  x:Name="myTextBlock" Style="{StaticResource BaselineTextStyle}" VerticalAlignment="Center" HorizontalAlignment="Left" Text="Timer" />
+            <TextBlock Loaded="StartTimer"  Grid.Column="1"  x:Name="TimerTextBox" Style="{StaticResource PageHeaderTextStyle}"   Text="Seconds: 00:00:00" Margin="746,0,41,40" />
             <Button x:Name="backButton" Click="GoBack" IsEnabled="{Binding Frame.CanGoBack, ElementName=pageRoot}" Style="{StaticResource BackButtonStyle}"/>
             <TextBlock x:Name="pageTitle" Grid.Column="1" IsHitTestVisible="false" Style="{StaticResource PageHeaderTextStyle}" Text="SET" Margin="0,0,979,40"/>
-            
+            <TextBlock x:Name="SetFoundTextBlock" Grid.Column="1"  Style="{StaticResource PageHeaderTextStyle}" Text="SET Found: 0" Margin="291,0,94,40" />
+
 
         </Grid>
  
