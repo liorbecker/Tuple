@@ -153,6 +153,33 @@
     <Content Include="Assets\LightGray.png" />
     <Content Include="Assets\MediumGray.png" />
     <Content Include="Assets\DarkGray.png" />
+    <Content Include="Images\0.png" />
+    <Content Include="Images\1.png" />
+    <Content Include="Images\10.png" />
+    <Content Include="Images\100.png" />
+    <Content Include="Images\101.png" />
+    <Content Include="Images\102.png" />
+    <Content Include="Images\11.png" />
+    <Content Include="Images\110.png" />
+    <Content Include="Images\111.png" />
+    <Content Include="Images\112.png" />
+    <Content Include="Images\12.png" />
+    <Content Include="Images\120.png" />
+    <Content Include="Images\121.png" />
+    <Content Include="Images\122.png" />
+    <Content Include="Images\2.png" />
+    <Content Include="Images\20.png" />
+    <Content Include="Images\200.png" />
+    <Content Include="Images\201.png" />
+    <Content Include="Images\202.png" />
+    <Content Include="Images\21.png" />
+    <Content Include="Images\210.png" />
+    <Content Include="Images\211.png" />
+    <Content Include="Images\212.png" />
+    <Content Include="Images\22.png" />
+    <Content Include="Images\220.png" />
+    <Content Include="Images\221.png" />
+    <Content Include="Images\222.png" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">

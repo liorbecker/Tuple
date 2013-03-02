@@ -4,7 +4,7 @@ namespace Tuple.Logic.Interfaces
     public enum Symbol
     {
         Oval,
-        Squiggle,
+        Square,
         Diamond
     }
 }

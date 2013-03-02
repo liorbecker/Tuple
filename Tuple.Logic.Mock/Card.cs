@@ -64,7 +64,7 @@ namespace Tuple.Logic.Mock
 
         public override int GetHashCode()
         {
-            return ((int)Color * 1) + ((int)Number * 100) + ((int)Shading * 10000) + ((int)Symbol * 1000000);
+            return ((int)Color * 1) + ((int)Number * 10) + ((int)Shading * 100) + ((int)Symbol * 1000);
         }
     }
 }

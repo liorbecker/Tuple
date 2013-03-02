@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.Tracing;
 using System.Threading;
 using System.Threading.Tasks;
-using Windows.Storage;
-using Windows.UI;
-using System.Diagnostics;
 using Windows.ApplicationModel.DataTransfer;
-
+using Windows.Storage;
 
 namespace Tuple.Infra.Log
 {
@@ -31,7 +27,6 @@ namespace Tuple.Infra.Log
         /// <summary>
         /// The format to be used by logging.
         /// </summary>
-        /// 
         private string m_FormatHtml = "<table><tr><td width=\"200\"><font face=Arial size=3 color={3}>{0:yyyy-MM-dd HH\\:mm\\:ss\\:ffff}</td><td width=\"100\"><font face=Arial size=3 color={3}>{1}</td><td width=\"1000\"><font face=Arial size=3 color={3}>'{2}'</td></tr></font>";
 
 
