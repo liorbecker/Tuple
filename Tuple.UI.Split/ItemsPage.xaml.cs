@@ -22,6 +22,7 @@ using System.Threading.Tasks;
 using Windows.UI;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Popups;
+using Windows.UI.Xaml.Media.Imaging;
 
 // The Items Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234233
 
@@ -100,9 +101,13 @@ namespace Tuple.UI.Split
                 var position = (uint)card.Position.Row + (uint)card.Position.Col*3;
 
                 orderButtinDic[position].Visibility = Windows.UI.Xaml.Visibility.Visible;
-                //orderButtinDic[position].Content = card;
                 ((TextBlock)((StackPanel)orderButtinDic[position].Content).Children[0]).Text = card.ToString();
+                var imageUriForCard = new Uri("ms-appx:///Images/" + card.Card.GetHashCode() + ".png");
+                ((Image)((StackPanel)orderButtinDic[position].Content).Children[1]).Source = new BitmapImage(imageUriForCard); 
                 ((Button)((StackPanel)orderButtinDic[position].Content).Children[2]).Content = card;
+
+
+                
 
             }
         }
@@ -176,6 +181,8 @@ namespace Tuple.UI.Split
                             //Open the Card
                             //orderButtinDic[position].Content = card;
                             ((TextBlock)((StackPanel)orderButtinDic[position].Content).Children[0]).Text = card.ToString();
+                            var imageUriForCard = new Uri("ms-appx:///Images/" + card.Card.GetHashCode() + ".png");
+                            ((Image)((StackPanel)orderButtinDic[position].Content).Children[1]).Source = new BitmapImage(imageUriForCard); 
                             ((Button)((StackPanel)orderButtinDic[position].Content).Children[2]).Content = card;
                             orderButtinDic[position].BorderBrush = brushOriginal;
                             orderButtinDic[position].Visibility = Windows.UI.Xaml.Visibility.Visible;
