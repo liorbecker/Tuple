@@ -69,7 +69,7 @@ namespace Tuple.Logic.Mock
         {
             lock (boardLocker)
             {
-                return !deck.IsEmpty() && (CountAllOpenedCards() < 12 || !Util.isThereSet(GetAllOpenedCards()));
+                return !deck.IsEmpty() && (CountAllOpenedCards() < 12 || !Util.isThereSet(GetAllOpenedCards()) || (CountAllOpenedCards() % 3 != 0));
             }
         }
 
