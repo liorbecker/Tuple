@@ -37,7 +37,8 @@ namespace Tuple.UI.Split
 
         private IGame game;
         private List<Button> presedButtonsWithPosition = new List<Button>();
-        private Dictionary<uint, Button> orderButtinDic = new Dictionary<uint, Button>();
+        private Dictionary<uint, Button> orderButtonDic = new Dictionary<uint, Button>();
+        private Dictionary<Button, ICardWithPosition> orderCardDic = new Dictionary<Button, ICardWithPosition>();
         private SolidColorBrush brushYellowGreen = new SolidColorBrush(new Windows.UI.Color() { A = 0xFF, R = 0x00, G = 0xb2, B = 0xf0 });
         private Brush brushOriginal;
         private readonly int delaymilisec = 400;
@@ -61,24 +62,24 @@ namespace Tuple.UI.Split
         /// session.  This will be null the first time a page is visited.</param>
         protected override void LoadState(Object navigationParameter, Dictionary<String, Object> pageState)
         {
-            orderButtinDic[0] = Button0;
-            orderButtinDic[1] = Button1;
-            orderButtinDic[2] = Button2;
-            orderButtinDic[3] = Button3;
-            orderButtinDic[4] = Button4;
-            orderButtinDic[5] = Button5;
-            orderButtinDic[6] = Button6;
-            orderButtinDic[7] = Button7;
-            orderButtinDic[8] = Button8;
-            orderButtinDic[9] = Button9;
-            orderButtinDic[10] = Button10;
-            orderButtinDic[11] = Button11;
-            orderButtinDic[12] = Button12;
-            orderButtinDic[13] = Button13;
-            orderButtinDic[14] = Button14;
-            orderButtinDic[15] = Button15;
-            orderButtinDic[16] = Button16;
-            orderButtinDic[17] = Button17;
+            orderButtonDic[0] = Button0;
+            orderButtonDic[1] = Button1;
+            orderButtonDic[2] = Button2;
+            orderButtonDic[3] = Button3;
+            orderButtonDic[4] = Button4;
+            orderButtonDic[5] = Button5;
+            orderButtonDic[6] = Button6;
+            orderButtonDic[7] = Button7;
+            orderButtonDic[8] = Button8;
+            orderButtonDic[9] = Button9;
+            orderButtonDic[10] = Button10;
+            orderButtonDic[11] = Button11;
+            orderButtonDic[12] = Button12;
+            orderButtonDic[13] = Button13;
+            orderButtonDic[14] = Button14;
+            orderButtonDic[15] = Button15;
+            orderButtonDic[16] = Button16;
+            orderButtonDic[17] = Button17;
 
             brushOriginal = Button1.BorderBrush;
         }
@@ -99,24 +100,22 @@ namespace Tuple.UI.Split
             {
                 var card = game.OpenCard();
                 var position = (uint)card.Position.Row + (uint)card.Position.Col*3;
-
-                orderButtinDic[position].Visibility = Windows.UI.Xaml.Visibility.Visible;
-                ((TextBlock)((StackPanel)orderButtinDic[position].Content).Children[0]).Text = card.ToString();
-                var imageUriForCard = new Uri("ms-appx:///Images/" + card.Card.GetHashCode() + ".png");
-                ((Image)((StackPanel)orderButtinDic[position].Content).Children[1]).Source = new BitmapImage(imageUriForCard); 
-                ((Button)((StackPanel)orderButtinDic[position].Content).Children[2]).Content = card;
-
-
+                orderCardDic[orderButtonDic[position]] = card;
                 
+                //Set Image
+                orderButtonDic[position].Visibility = Visibility.Visible;
+                var imageUriForCard = new Uri("ms-appx:///Images/" + card.Card.GetHashCode() + ".png");
+                ((Image)orderButtonDic[position].Content).Source = new BitmapImage(imageUriForCard); 
+
+                //Tool Tip 
+                ToolTip toolTip = new ToolTip();
+                toolTip.Content = card.ToString();
+                ToolTipService.SetToolTip(orderButtonDic[position], toolTip);
+
 
             }
         }
 
-
-        private ICardWithPosition GetCardFromButton(Button b)
-        {
-            return ((Button)((StackPanel)b.Content).Children[2]).Content as ICardWithPosition;
-        }
 
         private async void ButtonN_Click(object sender, RoutedEventArgs e)
         {
@@ -144,9 +143,9 @@ namespace Tuple.UI.Split
                 //Check for 3 SET
                 if (presedButtonsWithPosition.Count == 3)
                 {
-                    if (game.RemoveSet(GetCardFromButton(presedButtonsWithPosition[0]) ,
-                        GetCardFromButton(presedButtonsWithPosition[1]),
-                        GetCardFromButton(presedButtonsWithPosition[2])))
+                    if (game.RemoveSet(orderCardDic[presedButtonsWithPosition[0]],
+                        orderCardDic[presedButtonsWithPosition[1]],
+                        orderCardDic[presedButtonsWithPosition[2]]))
                     {
 
                         ////////
@@ -178,15 +177,19 @@ namespace Tuple.UI.Split
                             await Task.Delay(delaymilisec);
                             var card = game.OpenCard();
                             var position = (uint)card.Position.Row + (uint)card.Position.Col * 3;
-                            //Open the Card
-                            //orderButtinDic[position].Content = card;
-                            ((TextBlock)((StackPanel)orderButtinDic[position].Content).Children[0]).Text = card.ToString();
+                            orderCardDic[orderButtonDic[position]] = card;
+                            
+                            //Open the Card with Image
                             var imageUriForCard = new Uri("ms-appx:///Images/" + card.Card.GetHashCode() + ".png");
-                            ((Image)((StackPanel)orderButtinDic[position].Content).Children[1]).Source = new BitmapImage(imageUriForCard); 
-                            ((Button)((StackPanel)orderButtinDic[position].Content).Children[2]).Content = card;
-                            orderButtinDic[position].BorderBrush = brushOriginal;
-                            orderButtinDic[position].Visibility = Windows.UI.Xaml.Visibility.Visible;
-                            FadeInCard(orderButtinDic[position].Name);
+                            ((Image)orderButtonDic[position].Content).Source = new BitmapImage(imageUriForCard); 
+                            orderButtonDic[position].BorderBrush = brushOriginal;
+                            orderButtonDic[position].Visibility = Visibility.Visible;
+                            FadeInCard(orderButtonDic[position].Name);
+
+                            //Tool Tip 
+                            ToolTip toolTip = new ToolTip();
+                            toolTip.Content = card.ToString();
+                            ToolTipService.SetToolTip(orderButtonDic[position], toolTip);
                         }
                     }
                 }
