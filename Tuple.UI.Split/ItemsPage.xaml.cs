@@ -23,6 +23,7 @@ using Windows.UI;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Popups;
 using Windows.UI.Xaml.Media.Imaging;
+using Windows.UI.Xaml.Shapes;
 
 // The Items Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234233
 
@@ -105,13 +106,15 @@ namespace Tuple.UI.Split
                 //Set Image
                 orderButtonDic[position].Visibility = Visibility.Visible;
                 var imageUriForCard = new Uri("ms-appx:///Images/" + card.Card.GetHashCode() + ".png");
-                ((Image)orderButtonDic[position].Content).Source = new BitmapImage(imageUriForCard); 
+                if (orderButtonDic[position].Content is Image)
+                    ((Image)orderButtonDic[position].Content).Source = new BitmapImage(imageUriForCard);
 
                 //Tool Tip 
                 ToolTip toolTip = new ToolTip();
                 toolTip.Content = card.ToString();
                 ToolTipService.SetToolTip(orderButtonDic[position], toolTip);
 
+                //this.Grid_Button.ColumnDefinitions
 
             }
         }
@@ -156,7 +159,11 @@ namespace Tuple.UI.Split
                         FadeOutCards(presedButtonsWithPosition[0].Name, presedButtonsWithPosition[1].Name, presedButtonsWithPosition[2].Name);
                         await Task.Delay(100);
 
-                     
+                        //////
+                        //Remove the 3 cards & Buttons from Map
+                        orderCardDic.Remove(presedButtonsWithPosition[0]);
+                        orderCardDic.Remove(presedButtonsWithPosition[1]);
+                        orderCardDic.Remove(presedButtonsWithPosition[2]);
                         presedButtonsWithPosition.Clear();
 
                         //Check if game is over
@@ -277,5 +284,31 @@ namespace Tuple.UI.Split
         }
         #endregion
 
+
+        /// <summary>
+        /// Creates a blue ellipse with black border
+        /// </summary>
+        public void CreateAnEllipse(Button b)
+        {
+            // Create an Ellipse
+            Ellipse blueRectangle = new Ellipse();
+            blueRectangle.Height = b.ActualHeight;
+            blueRectangle.Width = b.ActualWidth;
+
+            // Create a blue and a black Brush
+            SolidColorBrush blueBrush = new SolidColorBrush();
+            blueBrush.Color = Colors.Blue;
+            SolidColorBrush blackBrush = new SolidColorBrush();
+            blackBrush.Color = Colors.Black;
+
+            // Set Ellipse's width and color
+            blueRectangle.StrokeThickness = 4;
+            blueRectangle.Stroke = blackBrush;
+            // Fill rectangle with blue color
+            blueRectangle.Fill = blueBrush;
+
+            // Add Ellipse to the Grid.
+            b.Content = blueRectangle;
+        }
     }
 }
