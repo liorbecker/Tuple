@@ -44,9 +44,19 @@ namespace Tuple.UI.Split
         private Brush brushOriginal;
         private readonly int delaymilisec = 400;
         private uint setFoundCounter = 0;
+        private Boolean IsActiveGame = false;
+
+        //Timer
+        private int tickinsec = 0;
+        DispatcherTimer myDispatcherTimer = new DispatcherTimer();
+
 
         public ItemsPage()
         {
+            myDispatcherTimer.Interval = new TimeSpan(0, 0, 0, 1, 0); // 100 Milliseconds 
+            myDispatcherTimer.Tick += new EventHandler<object>(Each_Tick);
+            
+
             MetroEventSource.Log.Debug("Initializing the ItemsPage");
             game = new Game();
             this.InitializeComponent();
@@ -97,26 +107,25 @@ namespace Tuple.UI.Split
 
         private void Grid_Loaded_1(object sender, RoutedEventArgs e)
         {
-            while (game.ShouldOpenCard() ) 
-            {
-                var card = game.OpenCard();
-                var position = (uint)card.Position.Row + (uint)card.Position.Col*3;
-                orderCardDic[orderButtonDic[position]] = card;
+            //while (game.ShouldOpenCard() ) 
+            //{
+            //    var card = game.OpenCard();
+            //    var position = (uint)card.Position.Row + (uint)card.Position.Col*3;
+            //    orderCardDic[orderButtonDic[position]] = card;
                 
-                //Set Image
-                orderButtonDic[position].Visibility = Visibility.Visible;
-                var imageUriForCard = new Uri("ms-appx:///Images/" + card.Card.GetHashCode() + ".png");
-                if (orderButtonDic[position].Content is Image)
-                    ((Image)orderButtonDic[position].Content).Source = new BitmapImage(imageUriForCard);
+            //    //Set Image
+            //    orderButtonDic[position].Visibility = Visibility.Visible;
+            //    var imageUriForCard = new Uri("ms-appx:///Images/" + card.Card.GetHashCode() + ".png");
+            //    if (orderButtonDic[position].Content is Image)
+            //        ((Image)orderButtonDic[position].Content).Source = new BitmapImage(imageUriForCard);
 
-                //Tool Tip 
-                ToolTip toolTip = new ToolTip();
-                toolTip.Content = card.ToString();
-                ToolTipService.SetToolTip(orderButtonDic[position], toolTip);
+            //    //Tool Tip 
+            //    ToolTip toolTip = new ToolTip();
+            //    toolTip.Content = card.ToString();
+            //    ToolTipService.SetToolTip(orderButtonDic[position], toolTip);
 
-                //this.Grid_Button.ColumnDefinitions
 
-            }
+            //}
         }
 
 
@@ -209,25 +218,20 @@ namespace Tuple.UI.Split
         }
 
         #region Timer
-        public void StartTimer(object o, RoutedEventArgs sender)
+        private void StartTimer()
         {
-
-
-            DispatcherTimer myDispatcherTimer = new DispatcherTimer();
-            myDispatcherTimer.Interval = new TimeSpan(0, 0, 0, 1, 0); // 100 Milliseconds 
-            myDispatcherTimer.Tick += new EventHandler<object>(Each_Tick);
+            //myDispatcherTimer.Interval = new TimeSpan(0, 0, 0, 1, 0); // 100 Milliseconds 
+            //myDispatcherTimer.Tick += new EventHandler<object>(Each_Tick);
             myDispatcherTimer.Start();
         }
 
-        // A variable to count with.
-        int tickinsec = 0;
+
+
+        
 
         // Raised every 100 miliseconds while the DispatcherTimer is active.
-        public void Each_Tick(object o, object sender)
+        private void Each_Tick(object o, object sender)
         {
-
-            //TimeSpan t = new TimeSpan(0, 0, 0, tickinsec++);
-
             TimerTextBox.Text = "Time: " + TimeSpan.FromSeconds(++tickinsec).ToString();
         }
         #endregion 
@@ -287,6 +291,33 @@ namespace Tuple.UI.Split
             // Begin the animation.
             sb.Begin();
         }
+
+        private void FlyInAllCard()
+        {
+            Storyboard sb = new Storyboard();
+            int Milisec = 0;
+
+            foreach (var elem in orderButtonDic.Values)
+            {
+                // Create two DoubleAnimations and set their properties.
+                var anim = new PopInThemeAnimation();
+                anim.TargetName = elem.Name;
+                anim.FromHorizontalOffset = 500;
+                anim.BeginTime = TimeSpan.FromMilliseconds(Milisec);
+                Milisec += 25;
+                sb.Children.Add(anim);
+                elem.Visibility = Visibility.Visible;
+                
+            }
+
+            // Make the Storyboard a resource.
+            Grid_Button.Resources["unique_id_out"] = sb;
+            // Begin the animation.
+            sb.Begin();
+        }
+
+
+
         #endregion
 
 
@@ -314,6 +345,80 @@ namespace Tuple.UI.Split
 
             // Add Ellipse to the Grid.
             b.Content = blueRectangle;
+        }
+
+        private async void Button_Bar_Play_Click(object sender, RoutedEventArgs e)
+        {
+            //Hide App Bar
+            this.bottomAppBar.IsOpen = false;
+
+            //Replay ongoing game.
+            if (IsActiveGame)
+            {
+                MessageDialog md = new MessageDialog("Game is in progress, would like to replay?");
+                md.Commands.Add(new UICommand("OK",null,0));
+                var CancelCmd = new UICommand("Cancel", null, 1);
+                md.Commands.Add(CancelCmd);
+
+                // Set the command that will be invoked by default
+                md.DefaultCommandIndex = 0;
+
+                // Set the command to be invoked when escape is pressed
+                md.CancelCommandIndex = 1;
+
+                var ret = await md.ShowAsync();
+                if (ret == CancelCmd)
+
+                    return;
+            }
+
+
+            //Start new Game
+            StartNewGame();
+        }
+
+        private void StartNewGame()
+        {
+            
+            //Clear all members
+            game = new Game();
+            presedButtonsWithPosition.Clear();
+            orderCardDic.Clear();
+            setFoundCounter = 0;
+            IsActiveGame = true;
+            tickinsec = 0;
+            myDispatcherTimer.Stop();
+            SetFoundTextBlock.Text = "SET Found: 0";
+
+
+            //reset the open buttons
+            foreach (var b in orderButtonDic.Values)
+            {
+                b.Visibility = Visibility.Collapsed;
+                b.BorderBrush = brushOriginal;
+            }
+
+            //Open the cards
+            while (game.ShouldOpenCard())
+            {
+                var card = game.OpenCard();
+                var position = (uint)card.Position.Row + (uint)card.Position.Col * 3;
+                orderCardDic[orderButtonDic[position]] = card;
+
+                //Set Image
+                var imageUriForCard = new Uri("ms-appx:///Images/" + card.Card.GetHashCode() + ".png");
+                ((Image)orderButtonDic[position].Content).Source = new BitmapImage(imageUriForCard);
+                orderButtonDic[position].Visibility = Visibility.Visible;
+                //FlyInAllCard();
+                
+                //Tool Tip 
+                ToolTip toolTip = new ToolTip();
+                toolTip.Content = card.ToString();
+                ToolTipService.SetToolTip(orderButtonDic[position], toolTip);
+            }
+
+            //Start the timer
+            StartTimer();
         }
     }
 }

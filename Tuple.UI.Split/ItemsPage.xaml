@@ -52,10 +52,10 @@
     </Button>-->
 
     <Page.BottomAppBar>
-        <AppBar x:Name="bottomAppBar" Padding="10,0,10,0" Background="#FF00B2F0">
+        <AppBar x:Name="bottomAppBar" Padding="10,0,10,0" Background="#FF00B2F0" IsOpen="True">
             <Grid>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                    <Button Style="{StaticResource RefreshAppBarButtonStyle}" AutomationProperties.Name="Rpleay"  Click="Button_Bar_Click" />
+                    <Button Name="ReplayButton"  Style="{StaticResource PlayAppBarButtonStyle}" AutomationProperties.Name="Rpleay"  Click="Button_Bar_Play_Click" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                     <Button Style="{StaticResource BulletsAppBarButtonStyle}" Click="Button_Bar_Click"/>
@@ -103,7 +103,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Loaded="StartTimer"  Grid.Column="1"  x:Name="TimerTextBox" Style="{StaticResource PageHeaderTextStyle}"   Text="Seconds: 00:00:00" Margin="746,0,41,40" />
+            <TextBlock Grid.Column="1"  x:Name="TimerTextBox" Style="{StaticResource PageHeaderTextStyle}"   Text="Seconds: 00:00:00  " Margin="710,0,77,40" />
             <Button x:Name="backButton" Click="GoBack" IsEnabled="{Binding Frame.CanGoBack, ElementName=pageRoot}" Style="{StaticResource BackButtonStyle}"/>
             <TextBlock x:Name="pageTitle" Grid.Column="1" IsHitTestVisible="false" Style="{StaticResource PageHeaderTextStyle}" Text="SET" Margin="0,0,979,40"/>
             <TextBlock x:Name="SetFoundTextBlock" Grid.Column="1"  Style="{StaticResource PageHeaderTextStyle}" Text="SET Found: 0" Margin="291,0,94,40" />
