@@ -40,6 +40,33 @@
         </Style>
     </Page.Resources>
 
+    <!--<Button Style="{StaticResource AppBarButtonStyle}"
+        AutomationProperties.Name="Square Root" >
+        <Button.ContentTemplate>
+            <DataTemplate>
+                <Path Data="F1 M 1,5L 5,5L 9,15L 15,1L 27,1" 
+                  Stroke="{Binding Foreground, RelativeSource={RelativeSource Mode=TemplatedParent}}" 
+                  Width="20" Height="20" StrokeThickness="2" Stretch="Uniform"/>
+            </DataTemplate>
+        </Button.ContentTemplate>
+    </Button>-->
+
+    <Page.BottomAppBar>
+        <AppBar x:Name="bottomAppBar" Padding="10,0,10,0">
+            <Grid>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                    <Button Style="{StaticResource EditAppBarButtonStyle}" Click="Button_Bar_Click"/>
+                    <Button Style="{StaticResource RemoveAppBarButtonStyle}" Click="Button_Bar_Click"/>
+                    <Button Style="{StaticResource AddAppBarButtonStyle}" Click="Button_Bar_Click"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Style="{StaticResource RefreshAppBarButtonStyle}" Click="Button_Bar_Click"/>
+                    <Button Style="{StaticResource HelpAppBarButtonStyle}" Click="Button_Bar_Click"/>
+                </StackPanel>
+            </Grid>
+        </AppBar>
+    </Page.BottomAppBar>
+    
     <!--
         This grid acts as a root panel for the page that defines two rows:
         * Row 0 contains the back button and page title

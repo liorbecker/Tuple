@@ -120,6 +120,11 @@ namespace Tuple.UI.Split
         }
 
 
+        private  void Button_Bar_Click(object sender, RoutedEventArgs e)
+        {
+        }
+
+
         private async void ButtonN_Click(object sender, RoutedEventArgs e)
         {
 
