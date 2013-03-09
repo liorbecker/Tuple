@@ -38,6 +38,11 @@ namespace Tuple.Logic.Interfaces
         /// Get all the opened cards on the board
         /// </summary>
         /// <returns>A collection with all the opened cards on the board</returns>
-        IEnumerable<ICardWithPosition> GetAllOpenedCards(); 
+        IEnumerable<ICardWithPosition> GetAllOpenedCards();
+
+        /// <summary>
+        /// Get the current statistics for this game
+        /// </summary>
+        GameStats GetGameStats();
     }
 }

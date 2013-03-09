@@ -99,6 +99,7 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="GameStats.cs" />
     <Compile Include="ICardWithPosition.cs" />
     <Compile Include="Color.cs" />
     <Compile Include="IGame.cs" />

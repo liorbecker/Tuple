@@ -14,10 +14,14 @@ namespace Tuple.Logic.Mock
         private IDeck deck;
         private Board board;
 
+        private GameStats gameStats;
+
         private readonly Object boardLocker = new Object();
 
         public Game()
         {
+            gameStats = new GameStats();
+
             deck = new Deck();
 
             board = new Board(rows, cols);
@@ -56,6 +60,11 @@ namespace Tuple.Logic.Mock
                 }
                 else
                 {
+                    UpdateGameStats(
+                    board[firstCard.Position],
+                    board[secondCard.Position],
+                    board[thirdCard.Position]);
+
                     board[firstCard.Position] = null;
                     board[secondCard.Position] = null;
                     board[thirdCard.Position] = null;
@@ -170,6 +179,41 @@ namespace Tuple.Logic.Mock
 
             MetroEventSource.Log.Critical("GAME: wrong logic, should always find a free space sine the board is large enough (if it's full, there must be a set so this method shouldn't be called.");
             throw new Exception("GAME: wrong logic, should always find a free space sine the board is large enough (if it's full, there must be a set so this method shouldn't be called.");
+        }
+
+        public GameStats GetGameStats()
+        {
+            return gameStats;
+        }
+
+        private void UpdateGameStats(ICard firstCard, ICard secondCard, ICard thirdCard)
+        {
+            bool sameColor = (firstCard.Color == secondCard.Color && firstCard.Color == thirdCard.Color);
+            bool sameSymbol = (firstCard.Symbol == secondCard.Symbol && firstCard.Symbol == thirdCard.Symbol);
+            bool sameNumber = (firstCard.Number == secondCard.Number && firstCard.Number == thirdCard.Number);
+            bool sameShading = (firstCard.Shading == secondCard.Shading && firstCard.Shading == thirdCard.Shading);
+
+            if (sameColor)
+            {
+                gameStats.SameColor++;
+            }
+            if (sameSymbol)
+            {
+                gameStats.SameSymbol++;
+            }
+            if (sameNumber)
+            {
+                gameStats.SameNumber++;
+            }
+            if (sameShading)
+            {
+                gameStats.SameShading++;
+            }
+
+            if (!sameColor && !sameNumber && !sameShading && !sameSymbol)
+            {
+                gameStats.Different++;
+            }
         }
     }
 }
