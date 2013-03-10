@@ -42,7 +42,9 @@ namespace Tuple.UI.Split
         private List<Button> presedButtonsWithPosition = new List<Button>();
         private Dictionary<uint, Button> orderButtonDic = new Dictionary<uint, Button>();
         private Dictionary<Button, ICardWithPosition> orderCardDic = new Dictionary<Button, ICardWithPosition>();
-        private SolidColorBrush brushYellowGreen = new SolidColorBrush(new Windows.UI.Color() { A = 0xFF, R = 0x00, G = 0xb2, B = 0xf0 });
+        private SolidColorBrush brushYellowGreen = new SolidColorBrush(new Windows.UI.Color() { A = 0xFF, R = 0x00, G = 0x71, B = 0xbc });
+
+
         private Brush brushOriginal;
         private readonly int delaymilisec = 400;
         private uint setFoundCounter = 0;
