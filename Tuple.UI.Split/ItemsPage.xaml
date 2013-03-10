@@ -55,11 +55,9 @@
         <AppBar x:Name="bottomAppBar" Padding="10,0,10,0" Background="#FF00B2F0" IsOpen="True">
             <Grid>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                    <Button Name="ReplayButton"  Style="{StaticResource PlayAppBarButtonStyle}" AutomationProperties.Name="Rpleay"  Click="Button_Bar_Play_Click" />
+                    <Button Name="ReplayButton"  Style="{StaticResource PlayAppBarButtonStyle}" AutomationProperties.Name="Play"  Click="Button_Bar_Play_Click" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button Style="{StaticResource BulletsAppBarButtonStyle}" Click="Button_Bar_Click"/>
-                    <Button Style="{StaticResource SettingsAppBarButtonStyle}" Click="Button_Bar_Click"/>
                     <Button Style="{StaticResource HelpAppBarButtonStyle}" Click="Button_Bar_Click"/>
                 </StackPanel>
             </Grid>

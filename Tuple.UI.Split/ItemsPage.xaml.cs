@@ -24,6 +24,8 @@ using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Popups;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Shapes;
+using System.Text;
+using Windows.ApplicationModel.DataTransfer;
 
 // The Items Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234233
 
@@ -45,6 +47,7 @@ namespace Tuple.UI.Split
         private readonly int delaymilisec = 400;
         private uint setFoundCounter = 0;
         private Boolean IsActiveGame = false;
+        private String share = "empty";
 
         //Timer
         private int tickinsec = 0;
@@ -55,24 +58,17 @@ namespace Tuple.UI.Split
         {
             myDispatcherTimer.Interval = new TimeSpan(0, 0, 0, 1, 0); // 100 Milliseconds 
             myDispatcherTimer.Tick += new EventHandler<object>(Each_Tick);
+
+
+
+            
+
             
 
             MetroEventSource.Log.Debug("Initializing the ItemsPage");
             game = new Game();
             this.InitializeComponent();
-        }
 
-        /// <summary>
-        /// Populates the page with content passed during navigation.  Any saved state is also
-        /// provided when recreating a page from a prior session.
-        /// </summary>
-        /// <param name="navigationParameter">The parameter value passed to
-        /// <see cref="Frame.Navigate(Type, Object)"/> when this page was initially requested.
-        /// </param>
-        /// <param name="pageState">A dictionary of state preserved by this page during an earlier
-        /// session.  This will be null the first time a page is visited.</param>
-        protected override void LoadState(Object navigationParameter, Dictionary<String, Object> pageState)
-        {
             orderButtonDic[0] = Button0;
             orderButtonDic[1] = Button1;
             orderButtonDic[2] = Button2;
@@ -93,6 +89,25 @@ namespace Tuple.UI.Split
             orderButtonDic[17] = Button17;
 
             brushOriginal = Button1.BorderBrush;
+
+            DataTransferManager dataTransferManager = DataTransferManager.GetForCurrentView();
+            dataTransferManager.DataRequested += new TypedEventHandler<DataTransferManager,
+                DataRequestedEventArgs>(this.ShareTextHandler);
+        }
+
+        /// <summary>
+        /// Populates the page with content passed during navigation.  Any saved state is also
+        /// provided when recreating a page from a prior session.
+        /// </summary>
+        /// <param name="navigationParameter">The parameter value passed to
+        /// <see cref="Frame.Navigate(Type, Object)"/> when this page was initially requested.
+        /// </param>
+        /// <param name="pageState">A dictionary of state preserved by this page during an earlier
+        /// session.  This will be null the first time a page is visited.</param>
+        protected override void LoadState(Object navigationParameter, Dictionary<String, Object> pageState)
+        {
+          
+
         }
 
         /// <summary>
@@ -183,11 +198,44 @@ namespace Tuple.UI.Split
                         //Check if game is over
                         if (game.IsGameOver())
                         {
-                            this.pageTitle.Text = "Game finished!";
-                            MessageDialog md = new MessageDialog(TimerTextBox.Text + Environment.NewLine + SetFoundTextBlock.Text, "Game completed");
-                            md.Commands.Add(new UICommand("OK"));
+                            this.pageTitle.Text = "Game Over";
+
+                            //Build Text box for end of game.
+                            StringBuilder sb = new StringBuilder();
+                            var stat = game.GetGameStats();
+                            sb.AppendLine(setFoundCounter + " Sets");
+                            sb.AppendLine(stat.SameColor + " Set with same color");
+                            sb.AppendLine(stat.SameSymbol +" Set with same shape");
+                            sb.AppendLine(stat.SameShading + " Set with same fill");
+                            sb.AppendLine(stat.Different + "Set completely different");
+                            //Build Text box for end of game - Title
+                            StringBuilder sbtitle = new StringBuilder();
+                            sbtitle.AppendFormat("Game Completed - {0} (new high score!)", TimeSpan.FromSeconds(tickinsec));
+
+                            share = sbtitle.ToString();
+
+
+                            MessageDialog md = new MessageDialog(sb.ToString(), sbtitle.ToString());
+
+                            md.Commands.Add(new UICommand("New Game", (command) =>
+                            {
+                                StartNewGame();
+                            },0));
+
+                            md.Commands.Add(new UICommand("Exit", (command) =>
+                            {
+                                Application.Current.Exit();
+                            },1));
+
+
+                            // Set the command that will be invoked by default
+                            md.DefaultCommandIndex = 0;
+
+                            // Set the command to be invoked when escape is pressed
+                            md.CancelCommandIndex = 1;
+
                             await md.ShowAsync();
-                            //TODO: init new Game
+                            
                         }
 
                         ////////////////////////////
@@ -273,15 +321,15 @@ namespace Tuple.UI.Split
         {
 
             // Create a duration of 2 seconds.
-            Duration duration = new Duration(TimeSpan.FromSeconds(25));
+            //Duration duration = new Duration(TimeSpan.FromSeconds(25));
 
             // Create two DoubleAnimations and set their properties.
             FadeInThemeAnimation fIn = new FadeInThemeAnimation();
             fIn.TargetName = b1;
-            fIn.Duration = duration;
+            //fIn.Duration = duration;
 
             Storyboard sb = new Storyboard();
-            sb.Duration = duration;
+            //sb.Duration = duration;
             sb.Children.Add(fIn);
 
 
@@ -311,7 +359,7 @@ namespace Tuple.UI.Split
             }
 
             // Make the Storyboard a resource.
-            Grid_Button.Resources["unique_id_out"] = sb;
+            Grid_Button.Resources["unique_id_in_all"] = sb;
             // Begin the animation.
             sb.Begin();
         }
@@ -389,7 +437,7 @@ namespace Tuple.UI.Split
             tickinsec = 0;
             myDispatcherTimer.Stop();
             SetFoundTextBlock.Text = "SET Found: 0";
-
+            share = "empty";
 
             //reset the open buttons
             foreach (var b in orderButtonDic.Values)
@@ -410,15 +458,26 @@ namespace Tuple.UI.Split
                 ((Image)orderButtonDic[position].Content).Source = new BitmapImage(imageUriForCard);
                 orderButtonDic[position].Visibility = Visibility.Visible;
                 //FlyInAllCard();
+                FadeInCard(orderButtonDic[position].Name);
                 
                 //Tool Tip 
                 ToolTip toolTip = new ToolTip();
                 toolTip.Content = card.ToString();
                 ToolTipService.SetToolTip(orderButtonDic[position], toolTip);
             }
-
+            
             //Start the timer
+
             StartTimer();
         }
+
+        private void ShareTextHandler(DataTransferManager sender, DataRequestedEventArgs e)
+        {
+            DataRequest request = e.Request;
+            request.Data.Properties.Title = "Share SET Result";
+            request.Data.Properties.Description = "Share your high score with your friends.";
+            request.Data.SetText(share);
+        }
+
     }
 }
