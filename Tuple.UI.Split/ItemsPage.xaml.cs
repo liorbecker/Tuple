@@ -92,9 +92,7 @@ namespace Tuple.UI.Split
 
             brushOriginal = Button1.BorderBrush;
 
-            DataTransferManager dataTransferManager = DataTransferManager.GetForCurrentView();
-            dataTransferManager.DataRequested += new TypedEventHandler<DataTransferManager,
-                DataRequestedEventArgs>(this.ShareTextHandler);
+            
         }
 
         /// <summary>
@@ -108,7 +106,9 @@ namespace Tuple.UI.Split
         /// session.  This will be null the first time a page is visited.</param>
         protected override void LoadState(Object navigationParameter, Dictionary<String, Object> pageState)
         {
-          
+            DataTransferManager dataTransferManager = DataTransferManager.GetForCurrentView();
+            dataTransferManager.DataRequested += new TypedEventHandler<DataTransferManager,
+                DataRequestedEventArgs>(this.ShareTextHandler);
 
         }
 
@@ -200,7 +200,8 @@ namespace Tuple.UI.Split
                         //Check if game is over
                         if (game.IsGameOver())
                         {
-                            this.pageTitle.Text = "Game Over";
+                            //Stop Timer
+                            myDispatcherTimer.Stop();
 
                             //Build Text box for end of game.
                             StringBuilder sb = new StringBuilder();
@@ -270,13 +271,8 @@ namespace Tuple.UI.Split
         #region Timer
         private void StartTimer()
         {
-            //myDispatcherTimer.Interval = new TimeSpan(0, 0, 0, 1, 0); // 100 Milliseconds 
-            //myDispatcherTimer.Tick += new EventHandler<object>(Each_Tick);
             myDispatcherTimer.Start();
         }
-
-
-
         
 
         // Raised every 100 miliseconds while the DispatcherTimer is active.
