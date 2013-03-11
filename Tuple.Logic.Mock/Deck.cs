@@ -14,7 +14,7 @@ namespace Tuple.Logic.Mock
         {
             
             HashSet<ICard> cardsSet = new HashSet<ICard>();
-            foreach (var symbol in (Symbol[])Enum.GetValues(typeof(Symbol)))
+            //foreach (var symbol in (Symbol[])Enum.GetValues(typeof(Symbol)))
             {
                 foreach (var color in (Color[])Enum.GetValues(typeof(Color)))
                 {
@@ -22,7 +22,7 @@ namespace Tuple.Logic.Mock
                     {
                         foreach (var shading in (Shading[])Enum.GetValues(typeof(Shading)))
                         {
-                            cardsSet.Add(new Card(symbol, color, number, shading));
+                            cardsSet.Add(new Card(Symbol.Oval, color, number, shading));
                         }
                     }
                 }
