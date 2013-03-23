@@ -151,7 +151,17 @@ namespace Tuple.UI.Split
         }
 
 
-        private async void ButtonN_Click(object sender, RoutedEventArgs e)
+
+        private void ButtonN_Click(object sender, RoutedEventArgs e)
+        {
+            lock (game)
+            {
+                ButtonN_ClickAsync(sender, e);
+            }
+        }
+
+
+        private async void ButtonN_ClickAsync(object sender, RoutedEventArgs e)
         {
 
             //lock (game)
@@ -188,7 +198,7 @@ namespace Tuple.UI.Split
 
                         //Fade 3 cards out
                         FadeOutCards(presedButtonsWithPosition[0].Name, presedButtonsWithPosition[1].Name, presedButtonsWithPosition[2].Name);
-                        await Task.Delay(100);
+                        //await Task.Delay(100);
 
                         //////
                         //Remove the 3 cards & Buttons from Map
