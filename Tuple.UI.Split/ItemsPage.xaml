@@ -51,7 +51,7 @@
                     <Button x:Name="ReplayButton"  Style="{StaticResource PlayAppBarButtonStyle}" AutomationProperties.Name="Play"  Click="Button_Bar_Play_Click" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button Style="{StaticResource HelpAppBarButtonStyle}" Click="Button_Bar_Click"/>
+                    <Button Style="{StaticResource HelpAppBarButtonStyle}" />
                 </StackPanel>
             </Grid>
         </AppBar>
@@ -146,7 +146,7 @@
 
         </Grid>
 
-        <Grid Grid.Row="1" Loaded="Grid_Loaded_1" Margin="50" x:Name="Grid_Button" >
+        <Grid Grid.Row="1" Margin="50,10,50,90" x:Name="Grid_Button" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
@@ -156,7 +156,6 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
