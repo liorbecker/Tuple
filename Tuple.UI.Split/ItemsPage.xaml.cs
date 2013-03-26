@@ -37,7 +37,6 @@ namespace Tuple.UI.Split
     /// </summary>
     public sealed partial class ItemsPage : Tuple.UI.Split.Common.LayoutAwarePage
     {
-
         private IGame game;
         private List<Button> presedButtonsWithPosition = new List<Button>();
         private Dictionary<uint, Button> orderButtonDic = new Dictionary<uint, Button>();
@@ -60,12 +59,6 @@ namespace Tuple.UI.Split
         {
             myDispatcherTimer.Interval = new TimeSpan(0, 0, 0, 1, 0); // 100 Milliseconds 
             myDispatcherTimer.Tick += new EventHandler<object>(Each_Tick);
-
-
-
-            
-
-            
 
             MetroEventSource.Log.Debug("Initializing the ItemsPage");
             game = new Game();
@@ -91,8 +84,6 @@ namespace Tuple.UI.Split
             orderButtonDic[17] = Button17;
 
             brushOriginal = Button1.BorderBrush;
-
-            
         }
 
         /// <summary>
@@ -122,50 +113,16 @@ namespace Tuple.UI.Split
         {
         }
 
-        private void Grid_Loaded_1(object sender, RoutedEventArgs e)
+        
+
+        private async void ButtonN_Click(object sender, RoutedEventArgs e)
         {
-            //while (game.ShouldOpenCard() ) 
-            //{
-            //    var card = game.OpenCard();
-            //    var position = (uint)card.Position.Row + (uint)card.Position.Col*3;
-            //    orderCardDic[orderButtonDic[position]] = card;
-                
-            //    //Set Image
-            //    orderButtonDic[position].Visibility = Visibility.Visible;
-            //    var imageUriForCard = new Uri("ms-appx:///Images/" + card.Card.GetHashCode() + ".png");
-            //    if (orderButtonDic[position].Content is Image)
-            //        ((Image)orderButtonDic[position].Content).Source = new BitmapImage(imageUriForCard);
+            //New cards added on this call will be added here
+            var PositionsLst = new List<uint>();
 
-            //    //Tool Tip 
-            //    ToolTip toolTip = new ToolTip();
-            //    toolTip.Content = card.ToString();
-            //    ToolTipService.SetToolTip(orderButtonDic[position], toolTip);
-
-
-            //}
-        }
-
-
-        private  void Button_Bar_Click(object sender, RoutedEventArgs e)
-        {
-        }
-
-
-
-        private void ButtonN_Click(object sender, RoutedEventArgs e)
-        {
             lock (game)
             {
-                ButtonN_ClickAsync(sender, e);
-            }
-        }
-
-
-        private async void ButtonN_ClickAsync(object sender, RoutedEventArgs e)
-        {
-
-            //lock (game)
-            {
+                
                 var button = (Button)e.OriginalSource;
 
                 //Flip color BorderBrush 
@@ -191,7 +148,9 @@ namespace Tuple.UI.Split
                         orderCardDic[presedButtonsWithPosition[1]],
                         orderCardDic[presedButtonsWithPosition[2]]))
                     {
-
+                        MetroEventSource.Log.Info("SET found " + orderCardDic[presedButtonsWithPosition[0]] +
+                            orderCardDic[presedButtonsWithPosition[1]] +
+                            orderCardDic[presedButtonsWithPosition[2]]);
                         ////////
                         //Inc counter
                         SetFoundTextBlock.Text = "SET Found: " + ++setFoundCounter;
@@ -210,72 +169,95 @@ namespace Tuple.UI.Split
                         //Check if game is over
                         if (game.IsGameOver())
                         {
-                            //Stop Timer
-                            myDispatcherTimer.Stop();
-
-                            //Build Text box for end of game.
-                            StringBuilder sb = new StringBuilder();
-                            var stat = game.GetGameStats();
-                            sb.AppendLine(setFoundCounter + " Sets");
-                            sb.AppendLine(stat.SameColor + " Set with same color");
-                            sb.AppendLine(stat.SameSymbol +" Set with same shape");
-                            sb.AppendLine(stat.SameShading + " Set with same fill");
-                            sb.AppendLine(stat.Different + "Set completely different");
-                            //Build Text box for end of game - Title
-                            StringBuilder sbtitle = new StringBuilder();
-                            sbtitle.AppendFormat("Game Completed - {0} (new high score!)", TimeSpan.FromSeconds(tickinsec));
-
-                            share = sbtitle.ToString();
-
-
-                            MessageDialog md = new MessageDialog(sb.ToString(), sbtitle.ToString());
-
-                            md.Commands.Add(new UICommand("New Game", (command) =>
-                            {
-                                StartNewGame();
-                            },0));
-
-                            md.Commands.Add(new UICommand("Exit", (command) =>
-                            {
-                                Application.Current.Exit();
-                            },1));
-
-
-                            // Set the command that will be invoked by default
-                            md.DefaultCommandIndex = 0;
-
-                            // Set the command to be invoked when escape is pressed
-                            md.CancelCommandIndex = 1;
-
-                            await md.ShowAsync();
-                            
+                            MetroEventSource.Log.Info("GAME IS OVER");
+                            GameEndedAsync();
                         }
 
                         ////////////////////////////
                         //Open new cards
                         //match  - remove 3 cards
+                        
                         while (game.ShouldOpenCard())
                         {
-                            await Task.Delay(delaymilisec);
                             var card = game.OpenCard();
                             var position = (uint)card.Position.Row + (uint)card.Position.Col * 3;
+                            PositionsLst.Add(position);
                             orderCardDic[orderButtonDic[position]] = card;
                             
                             //Open the Card with Image
                             var imageUriForCard = new Uri("ms-appx:///Images/" + card.Card.GetHashCode() + ".png");
                             ((Image)orderButtonDic[position].Content).Source = new BitmapImage(imageUriForCard); 
                             orderButtonDic[position].BorderBrush = brushOriginal;
-                            orderButtonDic[position].Visibility = Visibility.Visible;
-                            FadeInCard(orderButtonDic[position].Name);
 
                             //Tool Tip 
                             ToolTip toolTip = new ToolTip();
                             toolTip.Content = card.ToString();
                             ToolTipService.SetToolTip(orderButtonDic[position], toolTip);
+                            
+                            MetroEventSource.Log.Info("New Card added to UI - " + card);
                         }
                     }
                 }
             }
+
+            ///////////////////////////////
+            //Display new cards
+            //This logic will take time
+            //And should not block the UI Thread
+            //It will be done after the lock
+            foreach (var pos in PositionsLst)
+            {
+                await Task.Delay(delaymilisec);
+                orderButtonDic[pos].Visibility = Visibility.Visible;
+                FadeInCard(orderButtonDic[pos].Name);
+            }
+            PositionsLst.Clear();
+        }
+
+
+        /// <summary>
+        /// Game has Ended
+        /// Ask user to quite or start new Game
+        /// </summary>
+        private async void GameEndedAsync()
+        {
+            //Stop Timer
+            myDispatcherTimer.Stop();
+
+            //Build Text box for end of game.
+            StringBuilder sb = new StringBuilder();
+            var stat = game.GetGameStats();
+            sb.AppendLine(setFoundCounter + " Sets");
+            sb.AppendLine(stat.SameColor + " Set with same color");
+            sb.AppendLine(stat.SameSymbol + " Set with same shape");
+            sb.AppendLine(stat.SameShading + " Set with same fill");
+            sb.AppendLine(stat.Different + " Set completely different");
+            //Build Text box for end of game - Title
+            StringBuilder sbtitle = new StringBuilder();
+            sbtitle.AppendFormat("Game Completed - {0} (new high score!)", TimeSpan.FromSeconds(tickinsec));
+
+            share = sbtitle.ToString();
+
+
+            MessageDialog md = new MessageDialog(sb.ToString(), sbtitle.ToString());
+
+            md.Commands.Add(new UICommand("New Game", (command) =>
+            {
+                StartNewGame();
+            }, 0));
+
+            md.Commands.Add(new UICommand("Exit", (command) =>
+            {
+                Application.Current.Exit();
+            }, 1));
+
+
+            // Set the command that will be invoked by default
+            md.DefaultCommandIndex = 0;
+
+            // Set the command to be invoked when escape is pressed
+            md.CancelCommandIndex = 1;
+            await md.ShowAsync();
         }
 
         #region Timer
