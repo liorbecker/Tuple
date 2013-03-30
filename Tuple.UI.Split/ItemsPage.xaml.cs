@@ -44,7 +44,7 @@ namespace Tuple.UI.Split
 
         public ItemsPage()
         {
-            myDispatcherTimer.Interval = new TimeSpan(0, 0, 0, 1, 0); // 100 Milliseconds 
+            myDispatcherTimer.Interval = new TimeSpan(0, 0, 0, 1, 0); // 1 second 
             myDispatcherTimer.Tick += new EventHandler<object>(Each_Tick);
 
             MetroEventSource.Log.Debug("Initializing the ItemsPage");
@@ -170,7 +170,8 @@ namespace Tuple.UI.Split
                             
                             //Open the Card with Image
                             var imageUriForCard = new Uri("ms-appx:///Images/" + card.Card.GetHashCode() + ".png");
-                            ((Image)orderButtonDic[position].Content).Source = new BitmapImage(imageUriForCard); 
+                            ((Image)orderButtonDic[position].Content).Source = new BitmapImage(imageUriForCard);
+                            orderButtonDic[position].Visibility = Visibility.Collapsed;
                             orderButtonDic[position].BorderBrush = brushOriginal;
 
                             //Tool Tip 
