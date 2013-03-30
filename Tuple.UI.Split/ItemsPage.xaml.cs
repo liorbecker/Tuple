@@ -1,31 +1,20 @@
-﻿using Tuple.UI.Split.Data;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Tuple.Infra.Log;
+using Tuple.Logic.Interfaces;
+using Tuple.Logic.Mock;
+using Windows.ApplicationModel.DataTransfer;
 using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.Graphics.Display;
-using Windows.UI.ViewManagement;
+using Windows.UI;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
-using Tuple.Infra.Log;
-using Tuple.Logic.Mock;
-using Tuple.Logic.Interfaces;
-using System.Threading.Tasks;
-using Windows.UI;
 using Windows.UI.Xaml.Media.Animation;
-using Windows.UI.Popups;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Shapes;
-using System.Text;
-using Windows.ApplicationModel.DataTransfer;
 
 // The Items Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234233
 
@@ -39,10 +28,9 @@ namespace Tuple.UI.Split
     {
         private IGame game;
         private List<Button> presedButtonsWithPosition = new List<Button>();
-        private Dictionary<uint, Button> orderButtonDic = new Dictionary<uint, Button>();
+        private Button[] orderButtonDic = new Button[18];
         private Dictionary<Button, ICardWithPosition> orderCardDic = new Dictionary<Button, ICardWithPosition>();
         private SolidColorBrush brushYellowGreen = new SolidColorBrush(new Windows.UI.Color() { A = 0xFF, R = 0x00, G = 0x71, B = 0xbc });
-
 
         private Brush brushOriginal;
         private readonly int delaymilisec = 400;
@@ -53,7 +41,6 @@ namespace Tuple.UI.Split
         //Timer
         private int tickinsec = 0;
         DispatcherTimer myDispatcherTimer = new DispatcherTimer();
-
 
         public ItemsPage()
         {
@@ -100,7 +87,6 @@ namespace Tuple.UI.Split
             DataTransferManager dataTransferManager = DataTransferManager.GetForCurrentView();
             dataTransferManager.DataRequested += new TypedEventHandler<DataTransferManager,
                 DataRequestedEventArgs>(this.ShareTextHandler);
-
         }
 
         /// <summary>
@@ -112,8 +98,6 @@ namespace Tuple.UI.Split
         void ItemView_ItemClick(object sender, ItemClickEventArgs e)
         {
         }
-
-        
 
         private async void ButtonN_Click(object sender, RoutedEventArgs e)
         {
@@ -214,7 +198,6 @@ namespace Tuple.UI.Split
             PositionsLst.Clear();
         }
 
-
         /// <summary>
         /// Game has Ended
         /// Ask user to quite or start new Game
@@ -260,24 +243,25 @@ namespace Tuple.UI.Split
             await md.ShowAsync();
         }
 
-        #region Timer
+        # region Timer
+
         private void StartTimer()
         {
             myDispatcherTimer.Start();
         }
-        
 
         // Raised every 100 miliseconds while the DispatcherTimer is active.
         private void Each_Tick(object o, object sender)
         {
             TimerTextBox.Text = "Time: " + TimeSpan.FromSeconds(++tickinsec).ToString();
         }
-        #endregion 
+        
+        # endregion 
 
-        #region Animation Procedure
+        # region Animation Procedure
+
         private void FadeOutCards(String b1, String b2, String b3)
         {
-           
             // Create a duration of 2 seconds.
             Duration duration = new Duration(TimeSpan.FromSeconds(25));
 
@@ -299,7 +283,6 @@ namespace Tuple.UI.Split
             sb.Children.Add(fOut2);
             sb.Children.Add(fOut3);
 
-
             // Make the Storyboard a resource.
             Grid_Button.Resources["unique_id_out"] = sb;
 
@@ -309,7 +292,6 @@ namespace Tuple.UI.Split
 
         private void FadeInCard(String b1)
         {
-
             // Create a duration of 2 seconds.
             //Duration duration = new Duration(TimeSpan.FromSeconds(25));
 
@@ -321,7 +303,6 @@ namespace Tuple.UI.Split
             Storyboard sb = new Storyboard();
             //sb.Duration = duration;
             sb.Children.Add(fIn);
-
 
             // Make the Storyboard a resource.
             Grid_Button.Resources["unique_id_in"] = sb;
@@ -335,7 +316,7 @@ namespace Tuple.UI.Split
             Storyboard sb = new Storyboard();
             int Milisec = 0;
 
-            foreach (var elem in orderButtonDic.Values)
+            foreach (var elem in orderButtonDic)
             {
                 // Create two DoubleAnimations and set their properties.
                 var anim = new PopInThemeAnimation();
@@ -354,10 +335,7 @@ namespace Tuple.UI.Split
             sb.Begin();
         }
 
-
-
-        #endregion
-
+        # endregion
 
         /// <summary>
         /// Creates a blue ellipse with black border
@@ -410,14 +388,12 @@ namespace Tuple.UI.Split
                     return;
             }
 
-
             //Start new Game
             StartNewGame();
         }
 
         private void StartNewGame()
         {
-            
             //Clear all members
             game = new Game();
             presedButtonsWithPosition.Clear();
@@ -430,7 +406,7 @@ namespace Tuple.UI.Split
             share = "empty";
 
             //reset the open buttons
-            foreach (var b in orderButtonDic.Values)
+            foreach (var b in orderButtonDic)
             {
                 b.Visibility = Visibility.Collapsed;
                 b.BorderBrush = brushOriginal;
@@ -468,6 +444,5 @@ namespace Tuple.UI.Split
             request.Data.Properties.Description = "Share your high score with your friends.";
             request.Data.SetText(share);
         }
-
     }
 }
