@@ -141,58 +141,58 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Button Grid.Row="0" Grid.Column="0" x:Name="Button0" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click">
+            <Button Grid.Row="0" Grid.Column="0" x:Name="Button0" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click" TabIndex="0">
                 <Image Stretch="Uniform" />
             </Button>
-            <Button Grid.Row="1" Grid.Column="0" x:Name="Button1" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click">
+            <Button Grid.Row="1" Grid.Column="0" x:Name="Button1" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click" TabIndex="1">
                 <Image Stretch="Uniform" />
             </Button>
-            <Button Grid.Row="2" Grid.Column="0" x:Name="Button2" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click" >
+            <Button Grid.Row="2" Grid.Column="0" x:Name="Button2" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click" TabIndex="2">
                 <Image Stretch="Uniform" />
             </Button>
-            <Button Grid.Row="0" Grid.Column="1" x:Name="Button3" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click">
+            <Button Grid.Row="0" Grid.Column="1" x:Name="Button3" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click" TabIndex="3">
                 <Image Stretch="Uniform"  />
             </Button>
-            <Button Grid.Row="1" Grid.Column="1" x:Name="Button4" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click">
+            <Button Grid.Row="1" Grid.Column="1" x:Name="Button4" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click" TabIndex="4">
                 <Image Stretch="Uniform"  />
             </Button>
-            <Button Grid.Row="2" Grid.Column="1" x:Name="Button5" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click">
+            <Button Grid.Row="2" Grid.Column="1" x:Name="Button5" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click" TabIndex="5">
                 <Image Stretch="Uniform"  />
             </Button>
-            <Button Grid.Row="0" Grid.Column="2" x:Name="Button6" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click">
+            <Button Grid.Row="0" Grid.Column="2" x:Name="Button6" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click" TabIndex="6">
                 <Image Stretch="Uniform"  />
             </Button>
-            <Button Grid.Row="1" Grid.Column="2" x:Name="Button7" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click">
+            <Button Grid.Row="1" Grid.Column="2" x:Name="Button7" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click" TabIndex="7">
                 <Image Stretch="Uniform"  />
             </Button>
-            <Button Grid.Row="2" Grid.Column="2" x:Name="Button8" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click">
+            <Button Grid.Row="2" Grid.Column="2" x:Name="Button8" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click" TabIndex="8">
                 <Image Stretch="Uniform"  />
             </Button>
-            <Button Grid.Row="0" Grid.Column="3" x:Name="Button9" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click">
+            <Button Grid.Row="0" Grid.Column="3" x:Name="Button9" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click" TabIndex="9">
                 <Image Stretch="Uniform"  />
             </Button>
-            <Button Grid.Row="1" Grid.Column="3" x:Name="Button10" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click">
+            <Button Grid.Row="1" Grid.Column="3" x:Name="Button10" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click" TabIndex="10">
                 <Image Stretch="Uniform"  />
             </Button>
-            <Button Grid.Row="2" Grid.Column="3" x:Name="Button11" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click">
+            <Button Grid.Row="2" Grid.Column="3" x:Name="Button11" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click" TabIndex="11">
                 <Image Stretch="Uniform"  />
             </Button>
-            <Button Grid.Row="0" Grid.Column="4" x:Name="Button12" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click">
+            <Button Grid.Row="0" Grid.Column="4" x:Name="Button12" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click" TabIndex="12">
                 <Image Stretch="Uniform"  />
             </Button>
-            <Button Grid.Row="1" Grid.Column="4" x:Name="Button13" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click">
+            <Button Grid.Row="1" Grid.Column="4" x:Name="Button13" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click" TabIndex="13">
                 <Image Stretch="Uniform"  />
             </Button>
-            <Button Grid.Row="2" Grid.Column="4" x:Name="Button14" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click">
+            <Button Grid.Row="2" Grid.Column="4" x:Name="Button14" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click" TabIndex="14">
                 <Image Stretch="Uniform"  />
             </Button>
-            <Button Grid.Row="0" Grid.Column="5" x:Name="Button15" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click">
+            <Button Grid.Row="0" Grid.Column="5" x:Name="Button15" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click" TabIndex="15">
                 <Image Stretch="Uniform"  />
             </Button>
-            <Button Grid.Row="1" Grid.Column="5" x:Name="Button16" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click">
+            <Button Grid.Row="1" Grid.Column="5" x:Name="Button16" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click" TabIndex="16">
                 <Image Stretch="Uniform"  />
             </Button>
-            <Button Grid.Row="2" Grid.Column="5" x:Name="Button17" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click">
+            <Button Grid.Row="2" Grid.Column="5" x:Name="Button17" Style="{StaticResource ButtonCardStyle}" Click="ButtonN_Click" TabIndex="17">
                 <Image Stretch="Uniform"  />
             </Button>
 

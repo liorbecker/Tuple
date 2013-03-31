@@ -31,7 +31,7 @@ namespace Tuple.UI.Split
         private IGame game;
         private List<Button> presedButtonsWithPosition = new List<Button>();
         private Button[] orderButtonDic = new Button[18];
-        private Dictionary<Button, ICardWithPosition> orderCardDic = new Dictionary<Button, ICardWithPosition>();
+        //private Dictionary<Button, ICardWithPosition> orderCardDic = new Dictionary<Button, ICardWithPosition>();
         private SolidColorBrush brushYellowGreen = new SolidColorBrush(new Windows.UI.Color() { A = 0xFF, R = 0x00, G = 0x71, B = 0xbc });
 
         private Brush brushOriginal;
@@ -125,26 +125,21 @@ namespace Tuple.UI.Split
                 //Check for 3 SET
                 if (presedButtonsWithPosition.Count == 3)
                 {
-                    if (game.RemoveSet(orderCardDic[presedButtonsWithPosition[0]].Position,
-                        orderCardDic[presedButtonsWithPosition[1]].Position,
-                        orderCardDic[presedButtonsWithPosition[2]].Position))
+
+                    if (game.RemoveSet(new Position(presedButtonsWithPosition[0].TabIndex),
+                        new Position(presedButtonsWithPosition[1].TabIndex),
+                        new Position(presedButtonsWithPosition[2].TabIndex)))
                     {
-                        MetroEventSource.Log.Info("SET found " + orderCardDic[presedButtonsWithPosition[0]] +
-                            orderCardDic[presedButtonsWithPosition[1]] +
-                            orderCardDic[presedButtonsWithPosition[2]]);
+                        MetroEventSource.Log.Info("SET found " + 
+                            presedButtonsWithPosition[0].TabIndex + " " +
+                            presedButtonsWithPosition[1].TabIndex + " " +
+                            presedButtonsWithPosition[2].TabIndex);
                         ////////
                         //Inc counter
                         SetFoundTextBlock.Text = "SET Found: " + ++setFoundCounter;
 
                         //Fade 3 cards out
                         FadeOutCards(presedButtonsWithPosition[0].Name, presedButtonsWithPosition[1].Name, presedButtonsWithPosition[2].Name);
-                        //await Task.Delay(100);
-
-                        //////
-                        //Remove the 3 cards & Buttons from Map
-                        orderCardDic.Remove(presedButtonsWithPosition[0]);
-                        orderCardDic.Remove(presedButtonsWithPosition[1]);
-                        orderCardDic.Remove(presedButtonsWithPosition[2]);
                         presedButtonsWithPosition.Clear();
 
                         //Check if game is over
@@ -163,7 +158,6 @@ namespace Tuple.UI.Split
                             var card = game.OpenCard();
                             var position = (uint)card.Position.Row + (uint)card.Position.Col * 3;
                             PositionsLst.Add(position);
-                            orderCardDic[orderButtonDic[position]] = card;
                             
                             //Open the Card with Image
                             var imageUriForCard = new Uri("ms-appx:///Images/" + card.Card.GetHashCode() + ".png");
@@ -250,7 +244,6 @@ namespace Tuple.UI.Split
             game = new Game();
             game.SecondPassed += new EventHandler<object>(Each_Tick);
             presedButtonsWithPosition.Clear();
-            orderCardDic.Clear();
             setFoundCounter = 0;
             IsActiveGame = true;
             SetFoundTextBlock.Text = "SET Found: 0";
@@ -269,7 +262,6 @@ namespace Tuple.UI.Split
             {
                 var card = game.OpenCard();
                 var position = (uint)card.Position.Row + (uint)card.Position.Col * 3;
-                orderCardDic[orderButtonDic[position]] = card;
 
                 //Set Image
                 var imageUriForCard = new Uri("ms-appx:///Images/" + card.Card.GetHashCode() + ".png");
