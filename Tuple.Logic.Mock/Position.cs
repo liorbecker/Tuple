@@ -14,6 +14,10 @@ namespace Tuple.Logic.Mock
             Col = col;
         }
 
+        public Position(int decimalPosition)
+            : this((ushort)(decimalPosition % 3), (ushort)(decimalPosition / 3))
+        { }
+
         public override string ToString()
         {
             return String.Format("[{0},{1}]", Row, Col); ;
