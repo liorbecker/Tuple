@@ -38,15 +38,10 @@ namespace Tuple.UI.Split
         private Boolean IsActiveGame = false;
         private String share = "empty";
 
-        //Timer
-        //private int tickinsec = 0;
-        //DispatcherTimer myDispatcherTimer = new DispatcherTimer();
-
         public ItemsPage()
         {
-            //myDispatcherTimer.Interval = new TimeSpan(0, 0, 0, 1, 0); // 1 second 
-            //myDispatcherTimer.Tick += new EventHandler<object>(Each_Tick);
-            
+            MetroEventSource.Log.Critical(s.ToString());
+
             MetroEventSource.Log.Debug("Initializing the ItemsPage");
             game = new Game();
             game.SecondPassed += new EventHandler<object>(Each_Tick);
@@ -208,7 +203,6 @@ namespace Tuple.UI.Split
         private async void GameEndedAsync()
         {
             //Stop Timer
-            //myDispatcherTimer.Stop();
             game.StopTimer();
 
             //Build Text box for end of game.
@@ -251,12 +245,6 @@ namespace Tuple.UI.Split
         }
 
         # region Timer
-
-        private void StartTimer()
-        {
-            game.StartTimer();
-            //myDispatcherTimer.Start();
-        }
 
         // Raised every 100 miliseconds while the DispatcherTimer is active.
         private void Each_Tick(object o, object sender)
@@ -443,8 +431,7 @@ namespace Tuple.UI.Split
             }
             
             //Start the timer
-
-            StartTimer();
+            game.StartTimer();
         }
 
         private void ShareTextHandler(DataTransferManager sender, DataRequestedEventArgs e)
