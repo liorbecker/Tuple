@@ -20,7 +20,7 @@
             <!--<Setter Property="BorderBrush" Value="Black"/>-->
             <Setter Property="Background" Value="White"/>
             <Setter Property="Visibility" Value="Collapsed"/>
-            <Setter Property="BorderThickness" Value="3"/>
+            <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Transitions">
                 <Setter.Value>
                     <TransitionCollection>

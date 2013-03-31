@@ -153,6 +153,7 @@
     <Content Include="Assets\LightGray.png" />
     <Content Include="Assets\MediumGray.png" />
     <Content Include="Assets\DarkGray.png" />
+    <Content Include="Assets\test.png" />
     <Content Include="Images\0.png" />
     <Content Include="Images\1.png" />
     <Content Include="Images\10.png" />

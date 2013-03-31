@@ -108,6 +108,7 @@ namespace Tuple.UI.Split
             {
                 
                 var button = (Button)e.OriginalSource;
+                //CreateAnEllipse(button);
 
                 //Flip color BorderBrush 
                 if (button.BorderBrush == brushYellowGreen)
@@ -343,25 +344,25 @@ namespace Tuple.UI.Split
         /// </summary>
         public void CreateAnEllipse(Button b)
         {
-            // Create an Ellipse
-            Ellipse blueRectangle = new Ellipse();
-            blueRectangle.Height = b.ActualHeight;
-            blueRectangle.Width = b.ActualWidth;
+            Ellipse el = new Ellipse()
+            {
+                
+                StrokeThickness = 4,
+                Stroke = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 145, 0, 145))
+            };
 
-            // Create a blue and a black Brush
-            SolidColorBrush blueBrush = new SolidColorBrush();
-            blueBrush.Color = Colors.Blue;
-            SolidColorBrush blackBrush = new SolidColorBrush();
-            blackBrush.Color = Colors.Black;
+            el.Height = b.ActualHeight /2;
+            el.Width = el.Height / 2;
 
-            // Set Ellipse's width and color
-            blueRectangle.StrokeThickness = 4;
-            blueRectangle.Stroke = blackBrush;
-            // Fill rectangle with blue color
-            blueRectangle.Fill = blueBrush;
+            var image = new ImageBrush()
+            {
+                ImageSource = new BitmapImage(new Uri("ms-appx:/Assets/test.png")),
+                Stretch = Stretch.None
+            };
+            el.Fill = image;
 
             // Add Ellipse to the Grid.
-            b.Content = blueRectangle;
+            b.Content = el;
         }
 
         private async void Button_Bar_Play_Click(object sender, RoutedEventArgs e)
