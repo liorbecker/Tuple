@@ -40,7 +40,7 @@ namespace Tuple.UI.Split
 
         public ItemsPage()
         {
-            MetroEventSource.Log.Critical(s.ToString());
+            //MetroEventSource.Log.Critical(s.ToString());
 
             MetroEventSource.Log.Debug("Initializing the ItemsPage");
             game = new Game();
@@ -246,11 +246,10 @@ namespace Tuple.UI.Split
 
         # region Timer
 
-        // Raised every 100 miliseconds while the DispatcherTimer is active.
+        // Raised every second while the DispatcherTimer is active.
         private void Each_Tick(object o, object sender)
         {
             TimerTextBox.Text = "Time: " + game.GetGameStats().Time.ToString();
-                //TimeSpan.FromSeconds(++tickinsec).ToString();
         }
         
         # endregion 
@@ -398,9 +397,8 @@ namespace Tuple.UI.Split
             orderCardDic.Clear();
             setFoundCounter = 0;
             IsActiveGame = true;
-            //tickinsec = 0;
-            //myDispatcherTimer.Stop();
             SetFoundTextBlock.Text = "SET Found: 0";
+            TimerTextBox.Text = "Time: 00:00:00";
             share = "empty";
 
             //reset the open buttons
