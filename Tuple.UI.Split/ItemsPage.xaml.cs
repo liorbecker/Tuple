@@ -31,12 +31,10 @@ namespace Tuple.UI.Split
         private IGame game;
         private List<Button> presedButtonsWithPosition = new List<Button>();
         private Button[] orderButtonDic = new Button[18];
-        //private Dictionary<Button, ICardWithPosition> orderCardDic = new Dictionary<Button, ICardWithPosition>();
         private SolidColorBrush brushYellowGreen = new SolidColorBrush(new Windows.UI.Color() { A = 0xFF, R = 0x00, G = 0x71, B = 0xbc });
 
         private Brush brushOriginal;
         private readonly int delaymilisec = 400;
-        private uint setFoundCounter = 0;
         private Boolean IsActiveGame = false;
         private String share = "empty";
 
@@ -136,7 +134,7 @@ namespace Tuple.UI.Split
                             presedButtonsWithPosition[2].TabIndex);
                         ////////
                         //Inc counter
-                        SetFoundTextBlock.Text = "SET Found: " + ++setFoundCounter;
+                        SetFoundTextBlock.Text = "SET Found: " + game.GetGameStats().Sets;
 
                         //Fade 3 cards out
                         FadeOutCards(presedButtonsWithPosition[0].Name, presedButtonsWithPosition[1].Name, presedButtonsWithPosition[2].Name);
@@ -244,7 +242,6 @@ namespace Tuple.UI.Split
             game = new Game();
             game.SecondPassed += new EventHandler<object>(Each_Tick);
             presedButtonsWithPosition.Clear();
-            setFoundCounter = 0;
             IsActiveGame = true;
             SetFoundTextBlock.Text = "SET Found: 0";
             TimerTextBox.Text = "Time: 00:00:00";
