@@ -26,6 +26,8 @@ namespace Tuple.UI.Split
     /// </summary>
     public sealed partial class ItemsPage : Tuple.UI.Split.Common.LayoutAwarePage
     {
+        # region Members
+
         private IGame game;
         private List<Button> presedButtonsWithPosition = new List<Button>();
         private Button[] orderButtonDic = new Button[18];
@@ -37,6 +39,10 @@ namespace Tuple.UI.Split
         private uint setFoundCounter = 0;
         private Boolean IsActiveGame = false;
         private String share = "empty";
+
+        # endregion
+
+        # region Constructor
 
         public ItemsPage()
         {
@@ -69,6 +75,10 @@ namespace Tuple.UI.Split
             brushOriginal = Button1.BorderBrush;
         }
 
+        # endregion
+
+        # region Game
+
         /// <summary>
         /// Populates the page with content passed during navigation.  Any saved state is also
         /// provided when recreating a page from a prior session.
@@ -83,16 +93,6 @@ namespace Tuple.UI.Split
             DataTransferManager dataTransferManager = DataTransferManager.GetForCurrentView();
             dataTransferManager.DataRequested += new TypedEventHandler<DataTransferManager,
                 DataRequestedEventArgs>(this.ShareTextHandler);
-        }
-
-        /// <summary>
-        /// Invoked when an item is clicked.
-        /// </summary>
-        /// <param name="sender">The GridView (or ListView when the application is snapped)
-        /// displaying the item clicked.</param>
-        /// <param name="e">Event data that describes the item clicked.</param>
-        void ItemView_ItemClick(object sender, ItemClickEventArgs e)
-        {
         }
 
         private async void ButtonN_Click(object sender, RoutedEventArgs e)
@@ -244,6 +244,52 @@ namespace Tuple.UI.Split
             await md.ShowAsync();
         }
 
+        private void StartNewGame()
+        {
+            //Clear all members
+            game = new Game();
+            game.SecondPassed += new EventHandler<object>(Each_Tick);
+            presedButtonsWithPosition.Clear();
+            orderCardDic.Clear();
+            setFoundCounter = 0;
+            IsActiveGame = true;
+            SetFoundTextBlock.Text = "SET Found: 0";
+            TimerTextBox.Text = "Time: 00:00:00";
+            share = "empty";
+
+            //reset the open buttons
+            foreach (var b in orderButtonDic)
+            {
+                b.Visibility = Visibility.Collapsed;
+                b.BorderBrush = brushOriginal;
+            }
+
+            //Open the cards
+            while (game.ShouldOpenCard())
+            {
+                var card = game.OpenCard();
+                var position = (uint)card.Position.Row + (uint)card.Position.Col * 3;
+                orderCardDic[orderButtonDic[position]] = card;
+
+                //Set Image
+                var imageUriForCard = new Uri("ms-appx:///Images/" + card.Card.GetHashCode() + ".png");
+                ((Image)orderButtonDic[position].Content).Source = new BitmapImage(imageUriForCard);
+                orderButtonDic[position].Visibility = Visibility.Visible;
+                //FlyInAllCard();
+                FadeInCard(orderButtonDic[position].Name);
+
+                //Tool Tip 
+                ToolTip toolTip = new ToolTip();
+                toolTip.Content = card.ToString();
+                ToolTipService.SetToolTip(orderButtonDic[position], toolTip);
+            }
+
+            //Start the timer
+            game.StartTimer();
+        }
+
+        # endregion
+
         # region Timer
 
         // Raised every second while the DispatcherTimer is active.
@@ -254,7 +300,7 @@ namespace Tuple.UI.Split
         
         # endregion 
 
-        # region Animation Procedure
+        # region Animation Procedures
 
         private void FadeOutCards(String b1, String b2, String b3)
         {
@@ -333,31 +379,7 @@ namespace Tuple.UI.Split
 
         # endregion
 
-        /// <summary>
-        /// Creates a blue ellipse with black border
-        /// </summary>
-        public void CreateAnEllipse(Button b)
-        {
-            Ellipse el = new Ellipse()
-            {
-                
-                StrokeThickness = 4,
-                Stroke = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 145, 0, 145))
-            };
-
-            el.Height = b.ActualHeight /2;
-            el.Width = el.Height / 2;
-
-            var image = new ImageBrush()
-            {
-                ImageSource = new BitmapImage(new Uri("ms-appx:/Assets/test.png")),
-                Stretch = Stretch.None
-            };
-            el.Fill = image;
-
-            // Add Ellipse to the Grid.
-            b.Content = el;
-        }
+        # region App bar
 
         private async void Button_Bar_Play_Click(object sender, RoutedEventArgs e)
         {
@@ -368,7 +390,7 @@ namespace Tuple.UI.Split
             if (IsActiveGame)
             {
                 MessageDialog md = new MessageDialog("Game is in progress, would like to replay?");
-                md.Commands.Add(new UICommand("OK",null,0));
+                md.Commands.Add(new UICommand("OK", null, 0));
                 var CancelCmd = new UICommand("Cancel", null, 1);
                 md.Commands.Add(CancelCmd);
 
@@ -388,49 +410,9 @@ namespace Tuple.UI.Split
             StartNewGame();
         }
 
-        private void StartNewGame()
-        {
-            //Clear all members
-            game = new Game();
-            game.SecondPassed += new EventHandler<object>(Each_Tick);
-            presedButtonsWithPosition.Clear();
-            orderCardDic.Clear();
-            setFoundCounter = 0;
-            IsActiveGame = true;
-            SetFoundTextBlock.Text = "SET Found: 0";
-            TimerTextBox.Text = "Time: 00:00:00";
-            share = "empty";
+        # endregion
 
-            //reset the open buttons
-            foreach (var b in orderButtonDic)
-            {
-                b.Visibility = Visibility.Collapsed;
-                b.BorderBrush = brushOriginal;
-            }
-
-            //Open the cards
-            while (game.ShouldOpenCard())
-            {
-                var card = game.OpenCard();
-                var position = (uint)card.Position.Row + (uint)card.Position.Col * 3;
-                orderCardDic[orderButtonDic[position]] = card;
-
-                //Set Image
-                var imageUriForCard = new Uri("ms-appx:///Images/" + card.Card.GetHashCode() + ".png");
-                ((Image)orderButtonDic[position].Content).Source = new BitmapImage(imageUriForCard);
-                orderButtonDic[position].Visibility = Visibility.Visible;
-                //FlyInAllCard();
-                FadeInCard(orderButtonDic[position].Name);
-                
-                //Tool Tip 
-                ToolTip toolTip = new ToolTip();
-                toolTip.Content = card.ToString();
-                ToolTipService.SetToolTip(orderButtonDic[position], toolTip);
-            }
-            
-            //Start the timer
-            game.StartTimer();
-        }
+        # region Share
 
         private void ShareTextHandler(DataTransferManager sender, DataRequestedEventArgs e)
         {
@@ -439,5 +421,37 @@ namespace Tuple.UI.Split
             request.Data.Properties.Description = "Share your high score with your friends.";
             request.Data.SetText(share);
         }
+
+        # endregion
+
+        # region Roi UI tests
+
+        /// <summary>
+        /// Creates a blue ellipse with black border
+        /// </summary>
+        public void CreateAnEllipse(Button b)
+        {
+            Ellipse el = new Ellipse()
+            {
+
+                StrokeThickness = 4,
+                Stroke = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 145, 0, 145))
+            };
+
+            el.Height = b.ActualHeight / 2;
+            el.Width = el.Height / 2;
+
+            var image = new ImageBrush()
+            {
+                ImageSource = new BitmapImage(new Uri("ms-appx:/Assets/test.png")),
+                Stretch = Stretch.None
+            };
+            el.Fill = image;
+
+            // Add Ellipse to the Grid.
+            b.Content = el;
+        }
+
+        # endregion
     }
 }
