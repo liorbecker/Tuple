@@ -1,9 +1,12 @@
-﻿
+﻿using System;
+
 namespace Tuple.Logic.Interfaces
 {
     public class GameStats
     {
-        public int TicksInSec { get; set; }
+        public TimeSpan Time { get; set; }
+
+        public bool GameOver { get; set; }
 
         public int Sets{ get; set; }
         

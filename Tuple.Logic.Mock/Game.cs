@@ -3,42 +3,77 @@ using System.Collections.Generic;
 using Tuple.Infra.Log;
 using Tuple.Logic.Common;
 using Tuple.Logic.Interfaces;
+using Windows.UI.Xaml;
 
 namespace Tuple.Logic.Mock
 {
     public class Game : IGame
     {
+        # region Consts
+
         private const ushort rows = 3;
-        public const ushort cols = 6;
+        private const ushort cols = 6;
+
+        # endregion
+
+        # region Private members
 
         private IDeck deck;
         private Board board;
 
         private GameStats gameStats;
 
+        DispatcherTimer timer;
+
         private readonly Object boardLocker = new Object();
+        
+        # endregion
+
+        # region Public events
+
+        public event EventHandler<Object> SecondPassed;
+
+        # endregion
+
+        # region Constructor
 
         public Game()
         {
-            gameStats = new GameStats();
-
             deck = new Deck();
 
             board = new Board(rows, cols);
+
+            gameStats = new GameStats()
+            {
+                Time = new TimeSpan(0)
+            };
+
+            timer = new DispatcherTimer()
+            {
+                Interval = TimeSpan.FromSeconds(1)
+            };
+            timer.Tick += new EventHandler<object>(UpdateSecondPassed);
+        }
+
+        # endregion
+
+        # region public methods
+
+        public void StartTimer()
+        {
+            timer.Start();
+        }
+
+        public void StopTimer()
+        {
+            timer.Stop();
         }
 
         public bool IsGameOver()
         {
             lock (boardLocker)
 	        {
-                if (!deck.IsEmpty() || Util.isThereSet(GetAllOpenedCards()))
-                {
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
+                return IsGameOverNoLock();
             }
         }
 
@@ -94,7 +129,7 @@ namespace Tuple.Logic.Mock
                 if (Util.isThereSet(GetAllOpenedCards()))
                 {
                     var set = Util.FindLegalSet(GetAllOpenedCards());
-                    MetroEventSource.Log.Debug(set.Item1 + " - " + set.Item2 + " - " + set.Item3);
+                    MetroEventSource.Log.Debug("Available set: " + set.Item1 + " - " + set.Item2 + " - " + set.Item3);
                 }
                 else
                 {
@@ -105,46 +140,51 @@ namespace Tuple.Logic.Mock
             }
         }
 
+        public GameStats GetGameStats()
+        {
+            lock (boardLocker)
+            {
+                return gameStats;
+            }
+        }
+
         public IEnumerable<ICardWithPosition> GetAllOpenedCards()
         {
-            IList<ICardWithPosition> cards = new List<ICardWithPosition>();
-
-            for (ushort i = 0; i < rows; i++)
+            lock (boardLocker)
             {
-                for (ushort j = 0; j < cols; j++)
-                {
-                    if (board[i, j] != null)
-                    {
-                        cards.Add(new CardWithPosition(board[i, j], new Position(i, j)));
-                    }
-                }
+                return GetAllOpenedCardsNoLock();
             }
-
-            return cards;
         }
 
         public override string ToString()
         {
-            String boardString = String.Empty;
-            for (ushort i = 0; i < rows; i++)
+            lock (boardLocker)
             {
-                for (ushort j = 0; j < cols; j++)
+                String boardString = String.Empty;
+                for (ushort i = 0; i < rows; i++)
                 {
-                    if (board[i, j] != null)
+                    for (ushort j = 0; j < cols; j++)
                     {
-                        boardString += board[i, j].ToString().PadRight(31) + " ";
+                        if (board[i, j] != null)
+                        {
+                            boardString += board[i, j].ToString().PadRight(31) + " ";
+                        }
                     }
+                    boardString += Environment.NewLine;
                 }
-                boardString += Environment.NewLine;
-            }
 
-            return
-                new String('-', 95) + Environment.NewLine +
-                "- Deck empty: " + deck.IsEmpty() + " - Has set: " + Util.isThereSet(GetAllOpenedCards()) + Environment.NewLine +
-                new String('-', 95) + Environment.NewLine +
-                boardString +
-                new String('-', 95) + Environment.NewLine;
+                return
+                    new String('-', 95) + Environment.NewLine +
+                    "- Deck empty: " + deck.IsEmpty() + " - Has set: " + Util.isThereSet(GetAllOpenedCards()) + Environment.NewLine +
+                    new String('-', 95) + Environment.NewLine +
+                    boardString +
+                    new String('-', 95) + Environment.NewLine;
+            }
         }
+
+        # endregion
+
+        # region private methods
 
         private ushort CountAllOpenedCards()
         {
@@ -181,13 +221,10 @@ namespace Tuple.Logic.Mock
             throw new Exception("GAME: wrong logic, should always find a free space sine the board is large enough (if it's full, there must be a set so this method shouldn't be called.");
         }
 
-        public GameStats GetGameStats()
-        {
-            return gameStats;
-        }
-
         private void UpdateGameStats(ICard firstCard, ICard secondCard, ICard thirdCard)
         {
+            gameStats.GameOver = IsGameOverNoLock();
+
             gameStats.Sets++;
 
             bool sameColor = (firstCard.Color == secondCard.Color && firstCard.Color == thirdCard.Color);
@@ -217,5 +254,43 @@ namespace Tuple.Logic.Mock
                 gameStats.Different++;
             }
         }
+
+        private IEnumerable<ICardWithPosition> GetAllOpenedCardsNoLock()
+        {
+            IList<ICardWithPosition> cards = new List<ICardWithPosition>();
+
+            for (ushort i = 0; i < rows; i++)
+            {
+                for (ushort j = 0; j < cols; j++)
+                {
+                    if (board[i, j] != null)
+                    {
+                        cards.Add(new CardWithPosition(board[i, j], new Position(i, j)));
+                    }
+                }
+            }
+
+            return cards;
+        }
+
+        private bool IsGameOverNoLock()
+        {
+            return deck.IsEmpty() && !Util.isThereSet(GetAllOpenedCardsNoLock());
+        }
+
+        private void UpdateSecondPassed(object sender, object data)
+        {
+            lock (boardLocker)
+            {
+                gameStats.Time = gameStats.Time.Add(TimeSpan.FromSeconds(1));
+            }
+
+            if (SecondPassed != null)
+            {
+                SecondPassed(this, EventArgs.Empty);
+            }
+        }
+
+        # endregion
     }
 }

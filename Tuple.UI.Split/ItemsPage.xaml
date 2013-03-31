@@ -138,7 +138,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="1"  x:Name="TimerTextBox" Style="{StaticResource PageHeaderTextStyle}"   Text="Seconds: 00:00:00  " Margin="710,0,77,40" Foreground="#FF0071BC" />
+            <TextBlock Grid.Column="1"  x:Name="TimerTextBox" Style="{StaticResource PageHeaderTextStyle}"   Text="Time: 00:00:00  " Margin="710,0,77,40" Foreground="#FF0071BC" />
             <Button x:Name="backButton" Click="GoBack" IsEnabled="{Binding Frame.CanGoBack, ElementName=pageRoot}" Style="{StaticResource BackButtonStyle}"/>
             <TextBlock x:Name="pageTitle" Grid.Column="1" IsHitTestVisible="false" Style="{StaticResource PageHeaderTextStyle}" Text="Set" Margin="0,0,979,40" Foreground="#FF0071BC"/>
             <TextBlock x:Name="SetFoundTextBlock" Grid.Column="1"  Style="{StaticResource PageHeaderTextStyle}" Text="Set Found: 0" Margin="291,0,94,40" Foreground="#FF0071BC" />

@@ -39,16 +39,17 @@ namespace Tuple.UI.Split
         private String share = "empty";
 
         //Timer
-        private int tickinsec = 0;
-        DispatcherTimer myDispatcherTimer = new DispatcherTimer();
+        //private int tickinsec = 0;
+        //DispatcherTimer myDispatcherTimer = new DispatcherTimer();
 
         public ItemsPage()
         {
-            myDispatcherTimer.Interval = new TimeSpan(0, 0, 0, 1, 0); // 1 second 
-            myDispatcherTimer.Tick += new EventHandler<object>(Each_Tick);
-
+            //myDispatcherTimer.Interval = new TimeSpan(0, 0, 0, 1, 0); // 1 second 
+            //myDispatcherTimer.Tick += new EventHandler<object>(Each_Tick);
+            
             MetroEventSource.Log.Debug("Initializing the ItemsPage");
             game = new Game();
+            game.SecondPassed += new EventHandler<object>(Each_Tick);
             this.InitializeComponent();
 
             orderButtonDic[0] = Button0;
@@ -207,7 +208,8 @@ namespace Tuple.UI.Split
         private async void GameEndedAsync()
         {
             //Stop Timer
-            myDispatcherTimer.Stop();
+            //myDispatcherTimer.Stop();
+            game.StopTimer();
 
             //Build Text box for end of game.
             StringBuilder sb = new StringBuilder();
@@ -218,9 +220,11 @@ namespace Tuple.UI.Split
             sb.AppendLine(stat.SameShading + " Sets with same fill");
             sb.AppendLine(stat.SameNumber + " Sets with same number");
             sb.AppendLine(stat.Different + " Sets completely different");
+            sb.AppendLine(stat.Time + " time"); // TODO
             //Build Text box for end of game - Title
             StringBuilder sbtitle = new StringBuilder();
-            sbtitle.AppendFormat("Game Completed - {0} (new high score!)", TimeSpan.FromSeconds(tickinsec));
+            sbtitle.AppendFormat("Game Completed - {0} (new high score!)", stat.Time.ToString());
+                //TimeSpan.FromSeconds(tickinsec));
 
             share = sbtitle.ToString();
 
@@ -250,13 +254,15 @@ namespace Tuple.UI.Split
 
         private void StartTimer()
         {
-            myDispatcherTimer.Start();
+            game.StartTimer();
+            //myDispatcherTimer.Start();
         }
 
         // Raised every 100 miliseconds while the DispatcherTimer is active.
         private void Each_Tick(object o, object sender)
         {
-            TimerTextBox.Text = "Time: " + TimeSpan.FromSeconds(++tickinsec).ToString();
+            TimerTextBox.Text = "Time: " + game.GetGameStats().Time.ToString();
+                //TimeSpan.FromSeconds(++tickinsec).ToString();
         }
         
         # endregion 
@@ -399,12 +405,13 @@ namespace Tuple.UI.Split
         {
             //Clear all members
             game = new Game();
+            game.SecondPassed += new EventHandler<object>(Each_Tick);
             presedButtonsWithPosition.Clear();
             orderCardDic.Clear();
             setFoundCounter = 0;
             IsActiveGame = true;
-            tickinsec = 0;
-            myDispatcherTimer.Stop();
+            //tickinsec = 0;
+            //myDispatcherTimer.Stop();
             SetFoundTextBlock.Text = "SET Found: 0";
             share = "empty";
 

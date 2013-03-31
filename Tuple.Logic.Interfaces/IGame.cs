@@ -1,5 +1,6 @@
-﻿
+﻿using System;
 using System.Collections.Generic;
+
 namespace Tuple.Logic.Interfaces
 {
     /// <summary>
@@ -44,5 +45,11 @@ namespace Tuple.Logic.Interfaces
         /// Get the current statistics for this game
         /// </summary>
         GameStats GetGameStats();
+
+        void StartTimer();
+
+        void StopTimer();
+
+        event EventHandler<Object> SecondPassed;
     }
 }
