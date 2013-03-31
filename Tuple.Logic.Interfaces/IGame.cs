@@ -20,7 +20,7 @@ namespace Tuple.Logic.Interfaces
         /// <param name="secondCard">The second card in the set to check</param>
         /// <param name="thirdCard">The third card in the set to check</param>
         /// <returns>true if the provided set is a legal set</returns>
-        bool RemoveSet(ICardWithPosition firstCard, ICardWithPosition secondCard, ICardWithPosition thirdCard);
+        bool RemoveSet(IPosition firstCard, IPosition secondCard, IPosition thirdCard);
 
         /// <summary>
         /// Indicates if the current board need to call <see cref="OpenCard"/>

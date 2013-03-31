@@ -129,9 +129,9 @@ namespace Tuple.UI.Split
                 //Check for 3 SET
                 if (presedButtonsWithPosition.Count == 3)
                 {
-                    if (game.RemoveSet(orderCardDic[presedButtonsWithPosition[0]],
-                        orderCardDic[presedButtonsWithPosition[1]],
-                        orderCardDic[presedButtonsWithPosition[2]]))
+                    if (game.RemoveSet(orderCardDic[presedButtonsWithPosition[0]].Position,
+                        orderCardDic[presedButtonsWithPosition[1]].Position,
+                        orderCardDic[presedButtonsWithPosition[2]].Position))
                     {
                         MetroEventSource.Log.Info("SET found " + orderCardDic[presedButtonsWithPosition[0]] +
                             orderCardDic[presedButtonsWithPosition[1]] +
@@ -212,11 +212,12 @@ namespace Tuple.UI.Split
             //Build Text box for end of game.
             StringBuilder sb = new StringBuilder();
             var stat = game.GetGameStats();
-            sb.AppendLine(setFoundCounter + " Sets");
-            sb.AppendLine(stat.SameColor + " Set with same color");
-            sb.AppendLine(stat.SameSymbol + " Set with same shape");
-            sb.AppendLine(stat.SameShading + " Set with same fill");
-            sb.AppendLine(stat.Different + " Set completely different");
+            sb.AppendLine(stat.Sets + " Sets");
+            sb.AppendLine(stat.SameColor + " Sets with same color");
+            sb.AppendLine(stat.SameSymbol + " Sets with same shape");
+            sb.AppendLine(stat.SameShading + " Sets with same fill");
+            sb.AppendLine(stat.SameNumber + " Sets with same number");
+            sb.AppendLine(stat.Different + " Sets completely different");
             //Build Text box for end of game - Title
             StringBuilder sbtitle = new StringBuilder();
             sbtitle.AppendFormat("Game Completed - {0} (new high score!)", TimeSpan.FromSeconds(tickinsec));

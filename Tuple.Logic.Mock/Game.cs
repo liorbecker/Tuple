@@ -42,34 +42,34 @@ namespace Tuple.Logic.Mock
             }
         }
 
-        public bool RemoveSet(ICardWithPosition firstCard, ICardWithPosition secondCard, ICardWithPosition thirdCard)
+        public bool RemoveSet(IPosition firstCard, IPosition secondCard, IPosition thirdCard)
         {
             lock (boardLocker)
             {
-                if (!Util.isLegalSet(
-                    board[firstCard.Position],
-                    board[secondCard.Position],
-                    board[thirdCard.Position]))
+                if (Util.isLegalSet(
+                    board[firstCard],
+                    board[secondCard],
+                    board[thirdCard]))
                 {
-                    MetroEventSource.Log.Warn(String.Format("GAME: Trying to remove ilegal set {0}, {1}, {2}",
-                        board[firstCard.Position],
-                        board[secondCard.Position],
-                        board[thirdCard.Position]));
+                    UpdateGameStats(
+                    board[firstCard],
+                    board[secondCard],
+                    board[thirdCard]);
 
-                    return false;
+                    board[firstCard] = null;
+                    board[secondCard] = null;
+                    board[thirdCard] = null;
+
+                    return true;
                 }
                 else
                 {
-                    UpdateGameStats(
-                    board[firstCard.Position],
-                    board[secondCard.Position],
-                    board[thirdCard.Position]);
+                    MetroEventSource.Log.Warn(String.Format("GAME: Trying to remove ilegal set {0}, {1}, {2}",
+                        board[firstCard],
+                        board[secondCard],
+                        board[thirdCard]));
 
-                    board[firstCard.Position] = null;
-                    board[secondCard.Position] = null;
-                    board[thirdCard.Position] = null;
-
-                    return true;
+                    return false;
 	            }
             }
         }
@@ -188,6 +188,8 @@ namespace Tuple.Logic.Mock
 
         private void UpdateGameStats(ICard firstCard, ICard secondCard, ICard thirdCard)
         {
+            gameStats.Sets++;
+
             bool sameColor = (firstCard.Color == secondCard.Color && firstCard.Color == thirdCard.Color);
             bool sameSymbol = (firstCard.Symbol == secondCard.Symbol && firstCard.Symbol == thirdCard.Symbol);
             bool sameNumber = (firstCard.Number == secondCard.Number && firstCard.Number == thirdCard.Number);
