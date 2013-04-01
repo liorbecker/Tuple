@@ -1,11 +1,15 @@
-﻿using Tuple.Logic.Interfaces;
+﻿using System.Runtime.Serialization;
+using Tuple.Logic.Interfaces;
 
 namespace Tuple.Logic.Mock
 {
-    class CardWithPosition : ICardWithPosition
+    [DataContract]
+    public class CardWithPosition : ICardWithPosition
     {
+        [DataMember]
         public ICard Card { get; set; }
 
+        [DataMember]
         public IPosition Position { get; set; }
 
         public CardWithPosition(ICard card, IPosition position)

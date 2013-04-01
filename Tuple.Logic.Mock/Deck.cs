@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using Tuple.Infra.Log;
 using Tuple.Logic.Interfaces;
 
 namespace Tuple.Logic.Mock
 {
+    [DataContract]
     public class Deck : IDeck
     {
+        [DataMember]
         private Stack<ICard> cards;
 
         public Deck()

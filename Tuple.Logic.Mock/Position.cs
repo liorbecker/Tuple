@@ -1,11 +1,15 @@
 ﻿using System;
+using System.Runtime.Serialization;
 using Tuple.Logic.Interfaces;
 
 namespace Tuple.Logic.Mock
 {
+    [DataContract]
     public class Position : IPosition
     {
+        [DataMember]
         public ushort Row { get; set; }
+        [DataMember]
         public ushort Col { get; set; }
 
         public Position(ushort row, ushort col)

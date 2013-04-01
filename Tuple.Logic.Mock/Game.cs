@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using Tuple.Infra.Log;
 using Tuple.Logic.Common;
 using Tuple.Logic.Interfaces;
@@ -7,6 +8,7 @@ using Windows.UI.Xaml;
 
 namespace Tuple.Logic.Mock
 {
+    [DataContract]
     public class Game : IGame
     {
         # region Consts
@@ -18,13 +20,16 @@ namespace Tuple.Logic.Mock
 
         # region Private members
 
+        [DataMember]
         private IDeck deck;
+        [DataMember]
         private Board board;
-
+        [DataMember]
         private GameStats gameStats;
-
+        [IgnoreDataMember]
         DispatcherTimer timer;
 
+        [DataMember]
         private readonly Object boardLocker = new Object();
         
         # endregion
@@ -48,11 +53,7 @@ namespace Tuple.Logic.Mock
                 Time = new TimeSpan(0)
             };
 
-            timer = new DispatcherTimer()
-            {
-                Interval = TimeSpan.FromSeconds(1)
-            };
-            timer.Tick += new EventHandler<object>(UpdateSecondPassed);
+            
         }
 
         # endregion
@@ -61,6 +62,14 @@ namespace Tuple.Logic.Mock
 
         public void StartTimer()
         {
+            if (timer == null)
+            {
+                timer = new DispatcherTimer()
+                {
+                    Interval = TimeSpan.FromSeconds(1)
+                };
+                timer.Tick += new EventHandler<object>(UpdateSecondPassed);
+            }
             timer.Start();
         }
 

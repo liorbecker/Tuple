@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Runtime.Serialization;
 using Tuple.Logic.Interfaces;
 
 namespace Tuple.Logic.Mock
 {
+    [DataContract]
     public class Card : ICard
     {
         public Card(Symbol symbol, Color color, Number number, Shading shading)
@@ -13,24 +15,28 @@ namespace Tuple.Logic.Mock
             Shading = shading;
         }
 
+        [DataMember]
         public Symbol Symbol
         {
             get;
             private set;
         }
 
+        [DataMember]
         public Color Color
         {
             get;
             private set;
         }
 
+        [DataMember]
         public Number Number
         {
             get;
             private set;
         }
 
+        [DataMember]
         public Shading Shading
         {
             get;

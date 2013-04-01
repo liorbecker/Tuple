@@ -3,11 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Tuple.Infra.Log;
-using Tuple.Logic.Interfaces;
 using Tuple.Logic.Mock;
 using Windows.ApplicationModel.DataTransfer;
-using Windows.Foundation;
-using Windows.UI;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -28,8 +25,8 @@ namespace Tuple.UI.Split
     {
         # region Members
 
-        private IGame game;
-        private List<Button> presedButtonsWithPosition = new List<Button>();
+        private Game game;
+        private List<int> presedButtonsPosition = new List<int>();
         private Button[] orderButtonDic = new Button[18];
         private SolidColorBrush brushYellowGreen = new SolidColorBrush(new Windows.UI.Color() { A = 0xFF, R = 0x00, G = 0x71, B = 0xbc });
 
@@ -47,8 +44,7 @@ namespace Tuple.UI.Split
             //MetroEventSource.Log.Critical(s.ToString());
 
             MetroEventSource.Log.Debug("Initializing the ItemsPage");
-            game = new Game();
-            game.SecondPassed += new EventHandler<object>(Each_Tick);
+
             this.InitializeComponent();
 
             orderButtonDic[0] = Button0;
@@ -78,6 +74,42 @@ namespace Tuple.UI.Split
         # region Game
 
         /// <summary>
+        /// Preserves state associated with this page in case the application is suspended or the
+        /// page is discarded from the navigation cache.  Values must conform to the serialization
+        /// requirements of <see cref="SuspensionManager.SessionState"/>.
+        /// </summary>
+        /// <param name="pageState">An empty dictionary to be populated with serializable state.</param>
+        protected override void SaveState(Dictionary<String, Object> pageState)
+        {
+            try
+            {
+
+                if (game != null)
+                    game.StopTimer();
+
+                /////////////////////
+                //Save Session Data
+                pageState["IsActiveGame"] = IsActiveGame;
+
+                ///////////////////////////
+                //Save the game object
+                // http://www.silverlightshow.net/items/Windows-8-Metro-Something-about-application-life-cycle.aspx
+                if (IsActiveGame)
+                {
+                    pageState["game"] = game;
+                    pageState["presedButtonsPosition"] = presedButtonsPosition;
+                }
+
+            }
+            catch (Exception exp)
+            {
+                MetroEventSource.Log.Critical(exp.Message);
+            }
+
+
+        }
+
+        /// <summary>
         /// Populates the page with content passed during navigation.  Any saved state is also
         /// provided when recreating a page from a prior session.
         /// </summary>
@@ -88,13 +120,51 @@ namespace Tuple.UI.Split
         /// session.  This will be null the first time a page is visited.</param>
         protected override void LoadState(Object navigationParameter, Dictionary<String, Object> pageState)
         {
-            DataTransferManager dataTransferManager = DataTransferManager.GetForCurrentView();
-            dataTransferManager.DataRequested += new TypedEventHandler<DataTransferManager,
-                DataRequestedEventArgs>(this.ShareTextHandler);
+
+            // Restore values stored in session state.
+            if (pageState != null)
+            {
+                try
+                {
+                    IsActiveGame = (Boolean)pageState["IsActiveGame"];
+
+                    ///////////////////////////
+                    //Restore the game object
+                    if (pageState.ContainsKey("game") && pageState.ContainsKey("presedButtonsPosition"))
+                    {
+                        game = pageState["game"] as Game;
+                        presedButtonsPosition = pageState["presedButtonsPosition"] as List<int>;
+                        ReloadSuspendedGame();
+                    }
+                }
+                catch (Exception exp)
+                {
+                    MetroEventSource.Log.Critical("Unable to Load suspended game, starting new one.");
+                    MetroEventSource.Log.Critical(exp.Message);
+
+                    //reset all saved data
+                    game = null;
+                    presedButtonsPosition = new List<int>();
+                    pageState["game"] = null;
+                    pageState["presedButtonsPosition"] = null;
+                    pageState["IsActiveGame"] = false;
+
+                    //Start new Game
+                    StartNewGame();
+                }
+            }
+
+            //DataTransferManager dataTransferManager = DataTransferManager.GetForCurrentView();
+            //dataTransferManager.DataRequested += new TypedEventHandler<DataTransferManager,
+            //    DataRequestedEventArgs>(this.ShareTextHandler);
         }
+
+
 
         private async void ButtonN_Click(object sender, RoutedEventArgs e)
         {
+           
+
             //New cards added on this call will be added here
             var PositionsLst = new List<uint>();
 
@@ -108,37 +178,37 @@ namespace Tuple.UI.Split
                 if (button.BorderBrush == brushYellowGreen)
                 {
                     button.BorderBrush = brushOriginal;
-                    presedButtonsWithPosition.Remove(button);
+                    presedButtonsPosition.Remove(button.TabIndex);
                 }
                 else
                 {
-                    if (presedButtonsWithPosition.Count == 3)
+                    if (presedButtonsPosition.Count == 3)
                         return;
 
                     button.BorderBrush = brushYellowGreen;
-                    presedButtonsWithPosition.Add(button);
+                    presedButtonsPosition.Add(button.TabIndex);
                     
                 }
 
                 //Check for 3 SET
-                if (presedButtonsWithPosition.Count == 3)
+                if (presedButtonsPosition.Count == 3)
                 {
 
-                    if (game.RemoveSet(new Position(presedButtonsWithPosition[0].TabIndex),
-                        new Position(presedButtonsWithPosition[1].TabIndex),
-                        new Position(presedButtonsWithPosition[2].TabIndex)))
+                    if (game.RemoveSet(new Position(presedButtonsPosition[0]),
+                        new Position(presedButtonsPosition[1]),
+                        new Position(presedButtonsPosition[2])))
                     {
-                        MetroEventSource.Log.Info("SET found " + 
-                            presedButtonsWithPosition[0].TabIndex + " " +
-                            presedButtonsWithPosition[1].TabIndex + " " +
-                            presedButtonsWithPosition[2].TabIndex);
+                        MetroEventSource.Log.Info("SET found " +
+                            presedButtonsPosition[0] + " " +
+                            presedButtonsPosition[1] + " " +
+                            presedButtonsPosition[2]);
                         ////////
                         //Inc counter
                         SetFoundTextBlock.Text = "SET Found: " + game.GetGameStats().Sets;
 
                         //Fade 3 cards out
-                        FadeOutCards(presedButtonsWithPosition[0].Name, presedButtonsWithPosition[1].Name, presedButtonsWithPosition[2].Name);
-                        presedButtonsWithPosition.Clear();
+                        FadeOutCards(  orderButtonDic[presedButtonsPosition[0]].Name, orderButtonDic[presedButtonsPosition[1]].Name, orderButtonDic[presedButtonsPosition[2]].Name);
+                        presedButtonsPosition.Clear();
 
                         //Check if game is over
                         if (game.IsGameOver())
@@ -208,13 +278,31 @@ namespace Tuple.UI.Split
             sb.AppendLine(stat.Different + " Sets completely different");
             sb.AppendLine(stat.Time + " time"); // TODO
             //Build Text box for end of game - Title
-            StringBuilder sbtitle = new StringBuilder();
-            sbtitle.AppendFormat("Game Completed - {0} (new high score!)", stat.Time.ToString());
-                //TimeSpan.FromSeconds(tickinsec));
-
-            share = sbtitle.ToString();
+            var sbtitle = String.Format("Game Completed - {0} ", stat.Time.ToString());
+            share = sbtitle;
 
 
+            ////////////////
+            //Save High Score
+            //Save App Data
+            Windows.Storage.ApplicationDataContainer roamingSettings = Windows.Storage.ApplicationData.Current.RoamingSettings;
+            if (!roamingSettings.Values.ContainsKey("HighScore"))/*First game Ever !!!*/
+            {
+                roamingSettings.Values["HighScore"] = stat.Time.ToString();
+            }
+            else
+            {
+                if (roamingSettings.Values.ContainsKey("HighScore") &&
+                 TimeSpan.Compare(TimeSpan.Parse(roamingSettings.Values["HighScore"].ToString()), stat.Time) > 0) /*New High Score*/
+                {
+                    //New High score save it 
+                    roamingSettings.Values["HighScore"] = stat.Time.ToString();
+                    sbtitle = String.Format("Game Completed, New High Score - {0} ", stat.Time.ToString());
+                }
+            }
+
+            /////////////////
+            //Show dialog Box
             MessageDialog md = new MessageDialog(sb.ToString(), sbtitle.ToString());
 
             md.Commands.Add(new UICommand("New Game", (command) =>
@@ -241,7 +329,8 @@ namespace Tuple.UI.Split
             //Clear all members
             game = new Game();
             game.SecondPassed += new EventHandler<object>(Each_Tick);
-            presedButtonsWithPosition.Clear();
+
+            presedButtonsPosition.Clear();
             IsActiveGame = true;
             SetFoundTextBlock.Text = "SET Found: 0";
             TimerTextBox.Text = "Time: 00:00:00";
@@ -277,6 +366,87 @@ namespace Tuple.UI.Split
             game.StartTimer();
         }
 
+
+        /// <summary>
+        /// Reload Existing game from saved data
+        /// </summary>
+        private async void ReloadSuspendedGame()
+        {
+            //Hide the App Bar
+            this.bottomAppBar.IsOpen = false;
+
+            //Set  Text Box values
+            SetFoundTextBlock.Text = "SET Found: " + game.GetGameStats().Sets;
+            Each_Tick(null, null);
+
+
+            /////////////////
+            //Show dialog Box
+            MessageDialog md = new MessageDialog("Press continue to keep playing...", "Game was suspended");
+            md.Commands.Add(new UICommand("CONTINUE", null, 0));
+            await md.ShowAsync();
+
+            //reset the open buttons
+            foreach (var b in orderButtonDic)
+            {
+                b.Visibility = Visibility.Collapsed;
+                b.BorderBrush = brushOriginal;
+            }
+
+            //Check if game is over
+            if (game.IsGameOver())
+            {
+                MetroEventSource.Log.Info("GAME IS OVER");
+                GameEndedAsync();
+            }
+
+            //Dispaly open Cards with No animation
+            foreach(var card in game.GetAllOpenedCards())
+            {
+                var position = (uint)card.Position.Row + (uint)card.Position.Col * 3;
+                //Set Image
+                var imageUriForCard = new Uri("ms-appx:///Images/" + card.Card.GetHashCode() + ".png");
+                ((Image)orderButtonDic[position].Content).Source = new BitmapImage(imageUriForCard);
+                orderButtonDic[position].Visibility = Visibility.Visible;
+
+                //Tool Tip 
+                ToolTip toolTip = new ToolTip();
+                toolTip.Content = card.ToString();
+                ToolTipService.SetToolTip(orderButtonDic[position], toolTip);
+            }
+
+            //Set Pressed Cards
+            foreach (var pos in presedButtonsPosition)
+            {
+                orderButtonDic[pos].BorderBrush = brushYellowGreen;
+            }
+
+            //Open new cards if needed
+            while (game.ShouldOpenCard())
+            {
+                var card = game.OpenCard();
+                var position = (uint)card.Position.Row + (uint)card.Position.Col * 3;
+
+                //Set Image
+                var imageUriForCard = new Uri("ms-appx:///Images/" + card.Card.GetHashCode() + ".png");
+                ((Image)orderButtonDic[position].Content).Source = new BitmapImage(imageUriForCard);
+                orderButtonDic[position].Visibility = Visibility.Visible;
+                //FlyInAllCard();
+                FadeInCard(orderButtonDic[position].Name);
+
+                //Tool Tip 
+                ToolTip toolTip = new ToolTip();
+                toolTip.Content = card.ToString();
+                ToolTipService.SetToolTip(orderButtonDic[position], toolTip);
+            }
+
+            //Start the timer
+            Each_Tick(null,null);
+            game.SecondPassed += new EventHandler<object>(Each_Tick);
+            game.StartTimer();
+        }
+
+
         # endregion
 
         # region Timer
@@ -286,7 +456,17 @@ namespace Tuple.UI.Split
         {
             TimerTextBox.Text = "Time: " + game.GetGameStats().Time.ToString();
         }
-        
+
+
+        /// <summary>
+        /// Will be called from the App after Resuming
+        /// </summary>
+        public void StartTimer()
+        {
+            if (game != null)
+                game.StartTimer();
+        }
+
         # endregion 
 
         # region Animation Procedures
@@ -369,6 +549,26 @@ namespace Tuple.UI.Split
         # endregion
 
         # region App bar
+
+        private async void Button_Bar_HighScore_Click(object sender, RoutedEventArgs e)
+        {
+            // Restore values stored in app data.
+            Windows.Storage.ApplicationDataContainer roamingSettings = Windows.Storage.ApplicationData.Current.RoamingSettings;
+            if (roamingSettings.Values.ContainsKey("HighScore"))
+            {
+                MessageDialog md = new MessageDialog(roamingSettings.Values["HighScore"].ToString(), "Highest Score");
+                md.Commands.Add(new UICommand("OK", null, 0));
+                // Set the command that will be invoked by default
+                md.DefaultCommandIndex = 0;
+                // Set the command to be invoked when escape is pressed
+                md.CancelCommandIndex = 0;
+                var ret = await md.ShowAsync();
+            }
+
+            //Display App Bar
+            this.bottomAppBar.IsOpen = true;
+
+        }
 
         private async void Button_Bar_Play_Click(object sender, RoutedEventArgs e)
         {

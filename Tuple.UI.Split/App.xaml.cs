@@ -35,6 +35,18 @@ namespace Tuple.UI.Split
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+            SuspensionManager.KnownTypes.Add(typeof(Tuple.Logic.Mock.Game));
+            SuspensionManager.KnownTypes.Add(typeof(Tuple.Logic.Mock.Deck));
+            SuspensionManager.KnownTypes.Add(typeof(Tuple.Logic.Mock.Card));
+            SuspensionManager.KnownTypes.Add(typeof(Tuple.Logic.Mock.Position));
+            SuspensionManager.KnownTypes.Add(typeof(Tuple.Logic.Mock.Board));
+            SuspensionManager.KnownTypes.Add(typeof(Tuple.Logic.Mock.CardWithPosition));
+            SuspensionManager.KnownTypes.Add(typeof(Tuple.Logic.Interfaces.GameStats));
+            SuspensionManager.KnownTypes.Add(typeof(List<int>));
+
+
+            this.Resuming += OnResuming;
+            
         }
 
         /// <summary>
@@ -106,6 +118,27 @@ namespace Tuple.UI.Split
             var deferral = e.SuspendingOperation.GetDeferral();
             await SuspensionManager.SaveAsync();
             deferral.Complete();
+        }
+
+
+        
+        /// <summary>
+        /// Occurs when an app is resuming
+        /// </summary>
+        /// <param name="o"></param>
+        /// <param name="sender"></param>
+        private void OnResuming(object o, object sender)
+        {
+            //TODO (resume the timer
+            try
+            {
+                Frame rootFrame = Window.Current.Content as Frame;
+                var page = rootFrame.Content as ItemsPage;
+                page.StartTimer();
+            }
+            catch (Exception) { }
+
+
         }
     }
 }

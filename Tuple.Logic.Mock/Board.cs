@@ -1,14 +1,22 @@
-﻿using Tuple.Logic.Interfaces;
+﻿using System.Runtime.Serialization;
+using Tuple.Logic.Interfaces;
 
 namespace Tuple.Logic.Mock
 {
+    [DataContract]
     public class Board
     {
-        private ICard[,] board;
+        [DataMember]
+        private ICard[][] board;
 
         public Board(ushort maxRow, ushort maxCol)
         {
-            board = new Card[maxRow, maxCol];
+            board = new Card[maxRow][];
+
+            for (int i = 0; i < maxRow; i++)
+            {
+                board[i] = new Card[maxCol];
+            }
         }
 
         public ICard this[IPosition position]
@@ -28,12 +36,12 @@ namespace Tuple.Logic.Mock
         {
             get
             {
-                return board[row, col];
+                return board[row][col];
             }
 
             set
             {
-                board[row, col] = value;
+                board[row][col] = value;
             }
         }
     }
