@@ -67,6 +67,8 @@ namespace Tuple.UI.Split
             orderButtonDic[17] = Button17;
 
             brushOriginal = Button1.BorderBrush;
+
+            Window.Current.VisibilityChanged += Current_VisibilityChanged;
         }
 
         # endregion
@@ -447,6 +449,20 @@ namespace Tuple.UI.Split
         }
 
 
+        /// <summary>
+        /// User chamged the visability mode
+        /// Stop\Start the timer
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void Current_VisibilityChanged(object sender, Windows.UI.Core.VisibilityChangedEventArgs e)
+        {
+            if (!e.Visible)
+                StopTimer();
+            else
+                StartTimer();
+        }
+
         # endregion
 
         # region Timer
@@ -463,8 +479,17 @@ namespace Tuple.UI.Split
         /// </summary>
         public void StartTimer()
         {
-            if (game != null)
+            if (game != null && IsActiveGame)
                 game.StartTimer();
+        }
+
+        /// <summary>
+        /// Will be called from the App after Suspended\VisibilityChangedEventArgs
+        /// </summary>
+        public void StopTimer()
+        {
+            if (game != null && IsActiveGame)
+                game.StopTimer();
         }
 
         # endregion 

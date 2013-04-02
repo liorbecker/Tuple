@@ -70,12 +70,15 @@ namespace Tuple.Logic.Mock
                 };
                 timer.Tick += new EventHandler<object>(UpdateSecondPassed);
             }
-            timer.Start();
+
+            if(!timer.IsEnabled)
+                timer.Start();
         }
 
         public void StopTimer()
         {
-            timer.Stop();
+            if(timer != null && timer.IsEnabled)
+                timer.Stop();
         }
 
         public bool IsGameOver()
