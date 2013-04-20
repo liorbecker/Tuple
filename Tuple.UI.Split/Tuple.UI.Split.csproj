@@ -143,6 +143,15 @@
     <None Include="Tuple.UI.Split_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Back_green_open.png" />
+    <Content Include="Assets\Back_green_solid.png" />
+    <Content Include="Assets\Back_green_striped.png" />
+    <Content Include="Assets\Back_orange_open.png" />
+    <Content Include="Assets\Back_orange_solid.png" />
+    <Content Include="Assets\Back_orange_striped.png" />
+    <Content Include="Assets\Back_purple_open.png" />
+    <Content Include="Assets\Back_purple_solid.png" />
+    <Content Include="Assets\Back_purple_striped.png" />
     <Content Include="Assets\CardDemo.png" />
     <Content Include="Assets\Logo.png" />
     <Content Include="Assets\SmallLogo.png" />

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Tuple.Infra.Log;
+using Tuple.Logic.Interfaces;
 using Tuple.Logic.Mock;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.UI.Popups;
@@ -228,10 +229,15 @@ namespace Tuple.UI.Split
                             var card = game.OpenCard();
                             var position = (uint)card.Position.Row + (uint)card.Position.Col * 3;
                             PositionsLst.Add(position);
+
+                            //Open card with Roi Canvas (Option A)
+                            FillButtonWithCard(orderButtonDic[position], card.Card);
+
+                            //Open the Card with Image (Option B)
+                            //var imageUriForCard = new Uri("ms-appx:///Images/" + card.Card.GetHashCode() + ".png");
+                            //((Image)orderButtonDic[position].Content).Source = new BitmapImage(imageUriForCard);
                             
-                            //Open the Card with Image
-                            var imageUriForCard = new Uri("ms-appx:///Images/" + card.Card.GetHashCode() + ".png");
-                            ((Image)orderButtonDic[position].Content).Source = new BitmapImage(imageUriForCard);
+                            
                             orderButtonDic[position].Visibility = Visibility.Collapsed;
                             orderButtonDic[position].BorderBrush = brushOriginal;
 
@@ -351,9 +357,14 @@ namespace Tuple.UI.Split
                 var card = game.OpenCard();
                 var position = (uint)card.Position.Row + (uint)card.Position.Col * 3;
 
-                //Set Image
-                var imageUriForCard = new Uri("ms-appx:///Images/" + card.Card.GetHashCode() + ".png");
-                ((Image)orderButtonDic[position].Content).Source = new BitmapImage(imageUriForCard);
+                //Set Roi Canvas (Option A)
+                FillButtonWithCard(orderButtonDic[position], card.Card);
+
+                //Set Image (Option B)
+                //var imageUriForCard = new Uri("ms-appx:///Images/" + card.Card.GetHashCode() + ".png");
+                //((Image)orderButtonDic[position].Content).Source = new BitmapImage(imageUriForCard);
+                
+                
                 orderButtonDic[position].Visibility = Visibility.Visible;
                 //FlyInAllCard();
                 FadeInCard(orderButtonDic[position].Name);
@@ -638,32 +649,112 @@ namespace Tuple.UI.Split
 
         # endregion
 
-        # region Roi UI tests
+        # region Card Drawing
 
         /// <summary>
-        /// Creates a blue ellipse with black border
+        /// Drwas the desired card in the given button
         /// </summary>
-        public void CreateAnEllipse(Button b)
+        /// <param name="button">The button to draw in</param>
+        /// <param name="card">The card to draw in the button</param>
+        public void FillButtonWithCard(Button button, ICard card)
         {
-            Ellipse el = new Ellipse()
+            Grid grid = new Grid()
             {
-
-                StrokeThickness = 4,
-                Stroke = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 145, 0, 145))
+                Height = 195,//b.ActualHeight - 40, TODO
+                Width = 225,//b.ActualWidth - 40,
+                HorizontalAlignment = Windows.UI.Xaml.HorizontalAlignment.Center,
+                VerticalAlignment = Windows.UI.Xaml.VerticalAlignment.Center
             };
 
-            el.Height = b.ActualHeight / 2;
-            el.Width = el.Height / 2;
+            // Always one row
+            grid.RowDefinitions.Add(new RowDefinition());
 
+            int num = card.Number.GetValue();
+
+            // Number of columns depand on the number of elements in the card
+            for (int i = 0; i < num; i++)
+            {
+                grid.ColumnDefinitions.Add(new ColumnDefinition());
+            }
+
+            // Add shape to each cell in the grid
+            for (int i = 0; i < num; i++)
+            {
+                var shape = CreateSingleShape(card, grid.Height - 100);
+
+                if (num == 2)
+                {
+                    if (i == 0)
+                    {
+                        shape.HorizontalAlignment = Windows.UI.Xaml.HorizontalAlignment.Right;
+                        shape.Margin = new Thickness(0, 0, 10, 0);
+                    }
+                    else
+                    {
+                        shape.HorizontalAlignment = Windows.UI.Xaml.HorizontalAlignment.Left;
+                        shape.Margin = new Thickness(10, 0, 0, 0);
+                    }
+                }
+
+                Grid.SetRow(shape, 0);
+                Grid.SetColumn(shape, i);
+                grid.Children.Add(shape);
+            }
+
+            button.Content = grid;
+        }
+
+        private Shape CreateSingleShape(ICard card, double h)
+        {
+            Shape shape = null;
+
+            // Shape
+            switch (card.Symbol)
+	        {
+                case Symbol.Oval:
+                    shape = new Ellipse();
+                    break;
+                case Symbol.Square:
+                    shape = new Rectangle();
+                    break;
+                case Symbol.Diamond: // TODO
+                    shape = new Rectangle();
+                    var rotate = new RotateTransform() { CenterX = (h - 10)/2, CenterY = (h - 10)/2, Angle = 33.75 };
+                    //var skew = new SkewTransform() { CenterX = (w - 10)/2, CenterY = (h - 10)/2, AngleX = 0, AngleY = 22.5 };
+                    var transformGroup = new TransformGroup();
+                    
+                    transformGroup.Children.Add(rotate);
+                    //transformGroup.Children.Add(rotate);
+                    shape.RenderTransform = transformGroup;
+                    break;
+		        default:
+                    break;
+	        }
+            
+            // Margin
+            //shape.Margin = new Thickness(5);
+
+            // Stroke
+            shape.StrokeThickness = 2;
+            shape.Stroke = card.Color.GetBrush();
+
+            // Size
+            shape.Height = h;//(card.Symbol != Symbol.Diamond) ? h - 10 : w - 10;
+            shape.Width = (shape.Height / 1.61803398875) - ((shape.Height / 1.61803398875) % 5); // Golden ratio, rounded to 5
+
+            // Fill
             var image = new ImageBrush()
             {
-                ImageSource = new BitmapImage(new Uri("ms-appx:/Assets/test.png")),
+                ImageSource = new BitmapImage(new Uri(
+                    String.Format("ms-appx:/Assets/Back_{0}_{1}.png",
+                        card.Color.ToString().ToLower(),
+                        card.Shading.ToString().ToLower()))),
+
                 Stretch = Stretch.None
             };
-            el.Fill = image;
+            shape.Fill = image;
 
-            // Add Ellipse to the Grid.
-            b.Content = el;
+            return shape;
         }
 
         # endregion
