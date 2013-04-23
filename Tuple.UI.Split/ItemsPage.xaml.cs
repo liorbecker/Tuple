@@ -680,7 +680,7 @@ namespace Tuple.UI.Split
             // Add shape to each cell in the grid
             for (int i = 0; i < num; i++)
             {
-                var shape = CreateSingleShape(card, grid.Height - 100);
+                var shape = CreateSingleShape(card, grid.Height - 100, 0); // TODO
 
                 if (num == 2)
                 {
@@ -704,8 +704,13 @@ namespace Tuple.UI.Split
             button.Content = grid;
         }
 
-        private Shape CreateSingleShape(ICard card, double h)
+        private Shape CreateSingleShape(ICard card, double h, double w)
         {
+            // TODO
+            //h = h;
+            w = (h / 1.61803398875) - ((h / 1.61803398875) % 5); // Golden ratio, rounded to 5
+
+
             Shape shape = null;
 
             // Shape
@@ -718,13 +723,18 @@ namespace Tuple.UI.Split
                     shape = new Rectangle();
                     break;
                 case Symbol.Diamond: // TODO
+                    h -= 30;
+                    w = (h / 1.61803398875) - ((h / 1.61803398875) % 5);
+
                     shape = new Rectangle();
-                    var rotate = new RotateTransform() { CenterX = (h - 10)/2, CenterY = (h - 10)/2, Angle = 33.75 };
-                    //var skew = new SkewTransform() { CenterX = (w - 10)/2, CenterY = (h - 10)/2, AngleX = 0, AngleY = 22.5 };
+
+                    var skew = new SkewTransform() { CenterX = w / 2, CenterY = h / 2, AngleX = 0, AngleY = Math.Acos(w/h)*180/Math.PI };
+                    var rotate = new RotateTransform() { CenterX = w / 2, CenterY = h / 2, Angle = 45 - skew.AngleY/2 };
+                    
                     var transformGroup = new TransformGroup();
                     
+                    transformGroup.Children.Add(skew);
                     transformGroup.Children.Add(rotate);
-                    //transformGroup.Children.Add(rotate);
                     shape.RenderTransform = transformGroup;
                     break;
 		        default:
@@ -740,7 +750,7 @@ namespace Tuple.UI.Split
 
             // Size
             shape.Height = h;//(card.Symbol != Symbol.Diamond) ? h - 10 : w - 10;
-            shape.Width = (shape.Height / 1.61803398875) - ((shape.Height / 1.61803398875) % 5); // Golden ratio, rounded to 5
+            shape.Width = w; 
 
             // Fill
             var image = new ImageBrush()
